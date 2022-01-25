@@ -5,7 +5,7 @@ This code is for single-view COT retrieval at SZA=60 and VZA=0. The inputs are r
 The datasets used for this model are:
 Radiance (Input): 'data_reflectance.h5'
 Cloud Optical Thickness (Ground-truth):'data_cot.h5'
-They are the results from running the dataset preparing code, 'Dataset preparation_d1d2.py'. 
+They are the outputs from running the dataset preparing code, 'Dataset preparation.py'. 
 '''
 
 
