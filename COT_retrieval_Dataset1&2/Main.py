@@ -8,7 +8,6 @@ This code is for training the deep learning model of single-view COT retrieval a
 The datasets used for this model are:
 Radiance (Input): 'data_reflectance.h5'
 Cloud Optical Thickness (Ground-truth):'data_cot.h5'
-
 They are the outputs from running the dataset preparing code, 'Dataset_preparation.py'. 
 
 To train any RNN-based model, you may import the corresponding model. For example, if you want to train BiLSTM_Transformer_embedding, please type 0.
