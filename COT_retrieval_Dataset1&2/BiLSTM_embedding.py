@@ -1,4 +1,8 @@
-
+'''
+    Author: Xiangyang Meng
+    Email: xmeng1@umbc.edu
+    This code is for BiLSTM with embedding model.
+'''
 
 
 import tensorflow as tf
