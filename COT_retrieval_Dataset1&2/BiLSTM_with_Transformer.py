@@ -2,6 +2,7 @@
 '''
     Author: Xiangyang Meng
     Email: xmeng1@umbc.edu
+    This code is for BiLSTM with Transformer model.
 '''
 import tensorflow as tf
 #physical_devices = tf.config.list_physical_devices('GPU') 
