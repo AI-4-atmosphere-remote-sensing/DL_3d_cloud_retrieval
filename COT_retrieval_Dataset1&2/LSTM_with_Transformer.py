@@ -1,6 +1,7 @@
 '''
     Author: Xiangyang Meng
     Email: xmeng1@umbc.edu
+    This code is for LSTM with Transformer model.
 '''
 
 
