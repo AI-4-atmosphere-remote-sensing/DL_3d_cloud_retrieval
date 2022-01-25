@@ -1,6 +1,7 @@
 '''
     Author: Xiangyang Meng
     Email: xmeng1@umbc.edu
+    This code is for LSTM model.
 '''
 import tensorflow as tf
 #physical_devices = tf.config.list_physical_devices('GPU') 
