@@ -42,7 +42,7 @@ B. CNN-based model `3D_cloud_retrieval/COT_retrieval_Dataset1&2/CNN.py`
 C. Our proposed RNN-based models:
 * BiLSTM with Transformer and Embedding `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM_Transformer_embedding.py`
 ### Structure of deep learning model of retreiving COT: BiLSTM with Transformer and Embedding
-![BiLSTM](https://user-images.githubusercontent.com/55510330/149812842-5f65a0d5-bb14-4b26-a24c-37d43592c7b1.png)
+![BiLSTM transformer embedding (1)](https://user-images.githubusercontent.com/55510330/151221487-98c05139-8bb8-4af9-9158-155f415e9f00.png)
 * BiLSTM with Transformer `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM_with_Transformer.py`
 * Transformer `3D_cloud_retrieval/COT_retrieval_Dataset1&2/Transformer.py`
 * LSTM with Transformer `3D_cloud_retrieval/COT_retrieval_Dataset1&2/LSTM_with_Transformer.py`
