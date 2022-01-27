@@ -6,13 +6,13 @@ Retrieving cloud microphysics or optical properties  from reflectance is an inve
 
 
 ## Datasets
-Three versions of datasets summerized in Table 1:
+Two versions of datasets summerized in Table 1:
 
-* Version 1: simple fractal cloud for COT only with constant cloud top 
+* Version 1: simple fractal cloud for Cloud Optical Thickness (COT) only with constant cloud top 
 
 11 Features: Solar Azimuth Angle, Solar Zenith Angle, Surface Albedo, View Zenith Angle, Liquid water path, Effective radius, Wavelength, reflectance values, Cloud Optical Thickness, spatial x, spatial y
 
-* Version 2: simple fractal cloud for COT only with varying cloud top
+* Version 2: simple fractal cloud for Cloud Optical Thickness (COT) only with varying cloud top
 
 13 Features: Solar Azimuth Angle, Solar Zenith Angle, Surface Albedo, View Zenith Angle, Liquid water path, Effective radius, Wavelength, reflectance values, Cloud Optical Thickness, spatial x, spatial y, cloud_top_height(km), cloud_top_height(meters).
 
