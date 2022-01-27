@@ -55,7 +55,7 @@ Bi-directional Long Short Term Memory with Transformer and Embedding achieves th
 ### Models Testing
 After training any of the RNN-based deep learning model, you may run `3D_cloud_retrieval/COT_retrieval_Dataset1&2/test.py` for testing. The predicted COT retrieval will be saved. You can also visualize the comparison among original COT, deep learning retrieved COT and 1D retrieval results. 
 
-## Experiment result
+## Experiments results
 ![c68440eee1e9637798007125c35a05d](https://user-images.githubusercontent.com/55510330/151385336-87c770d8-04ef-4fd5-8527-13240829e15b.png)
 ## Required Packages
 * tf-nightly 2.7.0.dev20210801
