@@ -71,6 +71,8 @@ After training any of the RNN-based deep learning model, you may run `3D_cloud_r
 conda create --name dl_3d_cloud_retrieval python=3.7
 conda activate dl_3d_cloud_retrieval
 conda install cudnn
+git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval/COT_retrieval
+cd COT_retrieval
 pip install -r requirements.txt
 ```
 
