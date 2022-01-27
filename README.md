@@ -17,10 +17,9 @@ Three versions of datasets summerized in Table 1:
 13 Features: Solar Azimuth Angle, Solar Zenith Angle, Surface Albedo, View Zenith Angle, Liquid water path, Effective radius, Wavelength, reflectance values, Cloud Optical Thickness, spatial x, spatial y, cloud_top_height(km), cloud_top_height(meters).
 
 
+![datasets](https://user-images.githubusercontent.com/55510330/151377543-98ac3fea-04b9-41d2-8d7e-497a7f3a0324.png)
 
-![1640818610(1)](https://user-images.githubusercontent.com/55510330/147709506-c3cb1ecd-f3d1-45e5-babb-9aa32bc09041.png)
-
-We use Dataset 1 and Dataset 2 for Cloud Optical Thickness retrieval: 
+We use Dataset 1 and Dataset 2 for Cloud Optical Thickness(COT) retrieval: 
 
 ![WeChat Image_20211025153436](https://user-images.githubusercontent.com/55510330/138758886-be31f8ea-d4fd-42da-ac03-eb717bc92703.png)
 ## Pipeline
