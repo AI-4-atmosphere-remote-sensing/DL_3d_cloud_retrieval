@@ -75,5 +75,10 @@ Before running the codes, please install the required packages listed above:
 * Zhibo Zhang, Department of Physics, University of Maryland Baltimore County, <zzbatmos@umbc.edu>
 * Sanjay Purushotham, Department of Information Systems, University of Maryland Baltimore County, <psanjay@umbc.edu>
 
+## References
+Angelof, K., Bergstrom, K., Le, T., Xu, C., Rajapakshe, C., Zheng, J., & Zhang, Z. (2020). Machine Learning for Retrieving Cloud Optical Thickness from Observed Reflectance: 3D Effects CyberTraining: Big Data+ High-Performance Computing+ Atmospheric Sciences. UMBC Faculty Collection.
+
+Okamura, R., Iwabuchi, H., & Schmidt, K. S. (2017). Feasibility study of multi-pixel retrieval of optical thickness and droplet effective radius of inhomogeneous clouds using deep learning. Atmospheric Measurement Techniques, 10(12), 4747-4759.
+
 ## License
   Licensed under the [MIT LICENSE](LICENSE)
