@@ -31,7 +31,7 @@ As shown in dataset description above, each dataset is consisted of synthetic cl
 
 The deep learning models for retrieving Cloud Optical Thickness are as follows. To train model:
 ```
-python main.py --radiance_file_name data_reflectance.h5 --cot_file_name data_cot.h5
+python COT_retrieval\main.py --radiance_file_name data_reflectance.h5 --cot_file_name data_cot.h5
 ```
 
 A. DNN-based model (Okamura et al.) `3D_cloud_retrieval/COT_retrieval/DNN.py`
@@ -68,11 +68,11 @@ After training any of the RNN-based deep learning model, you may run `3D_cloud_r
 
 ### Install
 ```
-conda create --name dl_3d_cloud_retrieval python=3.7
-conda activate dl_3d_cloud_retrieval
+conda create --name dl_3d_cloud_retrieval_env python=3.7
+conda activate dl_3d_cloud_retrieval_env
 conda install cudnn
-git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval/COT_retrieval
-cd COT_retrieval
+git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval
+cd DL_3d_cloud_retrieval
 pip install -r requirements.txt
 ```
 
