@@ -58,6 +58,7 @@ After training any of the RNN-based deep learning model, you may run `3D_cloud_r
 ## Experiments results
 ![c68440eee1e9637798007125c35a05d](https://user-images.githubusercontent.com/55510330/151385336-87c770d8-04ef-4fd5-8527-13240829e15b.png)
 ## Required Packages
+* python 3.7
 * tf-nightly 2.7.0.dev20210801
 * keras-nightly 2.7.0.dev2021081000   
 * scikit-learn
@@ -66,8 +67,12 @@ After training any of the RNN-based deep learning model, you may run `3D_cloud_r
 * h5py 3.1.0           
 
 ### Install
-Before running the codes, please install the required packages listed above:
-`pip install -r requirements.txt`
+```
+conda create --name dl_3d_cloud_retrieval python=3.7
+conda activate dl_3d_cloud_retrieval
+conda install cudnn
+pip install -r requirements.txt
+```
 
 ## Contributors
 * Xiangyang Meng, Department of Information Systems, University of Maryland Baltimore County, <xmeng1@umbc.edu>
