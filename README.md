@@ -49,12 +49,6 @@ C. Our proposed RNN-based models:
 
 Bi-directional Long Short Term Memory with Transformer and Embedding achieves the best outcome in terms of COT retrieval. Hyperparameters fine-tuning is not included in these models as this process was done off-line. To train any of the above RNN-based model, you may run `3D_cloud_retrieval/COT retrieval_Dataset1&2/Main.py` The trained model will be saved and used for testing by running `3D_cloud_retrieval/COT retrieval_Dataset1&2/test.py`
 
-
-
-The deep learning model to retrieve COT and CER together is as the following:
-* `3D_cloud_retrieval/CER and COT retrievals_Dataset3/CER_and_COT_retrievals_DL model.py`
-### Structure of deep learning model of retrieving COT and CER simultaneously
-![cer and cot retrieval structure1](https://user-images.githubusercontent.com/55510330/151222566-d017cfd2-56f0-460e-a5b6-1436aa0c12b1.png)
 ### Models Testing
 After training any of the RNN-based deep learning model, you may run `3D_cloud_retrieval/COT_retrieval_Dataset1&2/test.py` for testing. The predicted COT retrieval will be saved. You can also visualize the comparison among original COT, deep learning retrieved COT and 1D retrieval results. 
 ## Required Packages
