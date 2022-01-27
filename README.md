@@ -33,7 +33,7 @@ The deep learning models for retrieving Cloud Optical Thickness are as follows:
 
 A. DNN-based model (Okamura et al.) `3D_cloud_retrieval/COT_retrieval_Dataset1&2/DNN.py`
 
-B. CNN-based model `3D_cloud_retrieval/COT_retrieval_Dataset1&2/CNN.py`
+B. CNN-based model (Angelof et al.) `3D_cloud_retrieval/COT_retrieval_Dataset1&2/CNN.py`
 
 C. Our proposed RNN-based models:
 * BiLSTM with Transformer and Embedding `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM_Transformer_embedding.py`
