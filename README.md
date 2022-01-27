@@ -25,7 +25,7 @@ We use Dataset 1 and Dataset 2 for Cloud Optical Thickness(COT) retrieval:
 ## Pipeline
 ![pipeline](https://user-images.githubusercontent.com/55510330/149815510-5dbae0b2-6530-47c4-b597-6e27546f22d4.png)
 ### Dataset Preparation
-As shown in dataset description above, each dataset is consisted of synthetic cloud profiles, and each synthetic cloud profile contains radiance values and COT values. For example, each demo cloud profile here has 4096 radiance values (input for deep learning models) and 4096 COT values （target output for deep learning models). The current resolution is 10m. We average reflectance data to 500m resolution and 1000m resolution before feeding them to the deep learning models. As a result, there are 82 (4096/50≈82)radiance values and 41(4096/100≈41) radiance values in each synthetic cloud profile, respectfully. The dataset preprocessing code prepares the dataset which will be used for the following deep learning models training and testing. For dataset preprocessing code, please refer to `3D_cloud_retrieval/COT_retrieval_Dataset1&2/Dataset_preparation.py`. 
+As shown in dataset description above, each dataset is consisted of synthetic cloud profiles, and each synthetic cloud profile contains radiance values and COT values. For example, each demo cloud profile here has 4096 radiance values (input for deep learning models) and 4096 COT values （target output for deep learning models). The current resolution is 10m. We average reflectance data to 500m resolution and 1000m resolution before feeding them to the deep learning models. As a result, there are 82 (4096/50≈82)radiance values and 41(4096/100≈41) radiance values in each synthetic cloud profile, respectfully. The dataset preprocessing code prepares the dataset which will be used for the following deep learning models training and testing. For dataset preprocessing code, please refer to `3D_cloud_retrieval/COT_retrieval/Dataset_preparation.py`. 
 
 ### Models Training
 
@@ -34,26 +34,26 @@ The deep learning models for retrieving Cloud Optical Thickness are as follows. 
 python main.py --radiance_file_name data_reflectance.h5 --cot_file_name data_cot.h5
 ```
 
-A. DNN-based model (Okamura et al.) `3D_cloud_retrieval/COT_retrieval_Dataset1&2/DNN.py`
+A. DNN-based model (Okamura et al.) `3D_cloud_retrieval/COT_retrieval/DNN.py`
 
-B. CNN-based model (Angelof et al.) `3D_cloud_retrieval/COT_retrieval_Dataset1&2/CNN.py`
+B. CNN-based model (Angelof et al.) `3D_cloud_retrieval/COT_retrieval/CNN.py`
 
 C. Our proposed RNN-based models:
-* BiLSTM with Transformer and Embedding `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM_Transformer_embedding.py`
+* BiLSTM with Transformer and Embedding `3D_cloud_retrieval/COT_retrieval/BiLSTM_Transformer_embedding.py`
 ### Structure of deep learning model of retreiving COT: BiLSTM with Transformer and Embedding
 ![BiLSTM transformer embedding (1)](https://user-images.githubusercontent.com/55510330/151221487-98c05139-8bb8-4af9-9158-155f415e9f00.png)
-* BiLSTM with Transformer `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM_with_Transformer.py`
-* Transformer `3D_cloud_retrieval/COT_retrieval_Dataset1&2/Transformer.py`
-* LSTM with Transformer `3D_cloud_retrieval/COT_retrieval_Dataset1&2/LSTM_with_Transformer.py`
-* BiLSTM with Embedding `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM_embedding.py`
-* LSTM with Embedding `3D_cloud_retrieval/COT_retrieval_Dataset1&2/LSTM_embedding.py`
-* BiLSTM `3D_cloud_retrieval/COT_retrieval_Dataset1&2/BiLSTM.py`
-* LSTM `3D_cloud_retrieval/COT_retrieval_Dataset1&2/LSTM.py`
+* BiLSTM with Transformer `3D_cloud_retrieval/COT_retrieval/BiLSTM_with_Transformer.py`
+* Transformer `3D_cloud_retrieval/COT_retrieval/Transformer.py`
+* LSTM with Transformer `3D_cloud_retrieval/COT_retrieval/LSTM_with_Transformer.py`
+* BiLSTM with Embedding `3D_cloud_retrieval/COT_retrieval/BiLSTM_embedding.py`
+* LSTM with Embedding `3D_cloud_retrieval/COT_retrieval/LSTM_embedding.py`
+* BiLSTM `3D_cloud_retrieval/COT_retrieval/BiLSTM.py`
+* LSTM `3D_cloud_retrieval/COT_retrieval/LSTM.py`
 
-Bi-directional Long Short Term Memory with Transformer and Embedding achieves the best outcome in terms of COT retrieval. Hyperparameters fine-tuning is not included in these models as this process was done off-line. To train any of the above RNN-based model, you may run `3D_cloud_retrieval/COT retrieval_Dataset1&2/Main.py` The trained model will be saved and used for testing by running `3D_cloud_retrieval/COT retrieval_Dataset1&2/test.py`
+Bi-directional Long Short Term Memory with Transformer and Embedding achieves the best outcome in terms of COT retrieval. Hyperparameters fine-tuning is not included in these models as this process was done off-line. To train any of the above RNN-based model, you may run `3D_cloud_retrieval/COT retrieval_Dataset1&2/Main.py` The trained model will be saved and used for testing by running `3D_cloud_retrieval/COT retrieval/test.py`
 
 ### Models Testing
-After training any of the RNN-based deep learning model, you may run `3D_cloud_retrieval/COT_retrieval_Dataset1&2/test.py` for testing. The predicted COT retrieval will be saved. You can also visualize the comparison among original COT, deep learning retrieved COT and 1D retrieval results. 
+After training any of the RNN-based deep learning model, you may run `3D_cloud_retrieval/COT_retrieval/test.py` for testing. The predicted COT retrieval will be saved. You can also visualize the comparison among original COT, deep learning retrieved COT and 1D retrieval results. 
 
 ## Experiments results
 ![c68440eee1e9637798007125c35a05d](https://user-images.githubusercontent.com/55510330/151385336-87c770d8-04ef-4fd5-8527-13240829e15b.png)
