@@ -2,7 +2,7 @@
 In this GitHub repositary, you will find information on how to preprocess the raw data, how to install required packages, all the deep learning models,how to train and test the models, and how to evaluate the test results quantitively and through visualization.
 
 ## Abstract
-Retrieving cloud microphysics or optical properties  from reflectance is an inverse problem.  Traditional physics-based method uses 1D retrieval to retrieve cloud properties based on the cloud’s three-dimensional (3D) radiative transfer effects. But this method suffers from significant gap between retrieved cloud properties and real cloud properties since 3D radiative-transfer effects affect the radiance values and cloud properties for cloud retrievals.  Recent researches have shown the feasibility of using deep learning models, such as convolutional neural networks and deep feed-forward neural networks, to reduce  retrieval  errors  for  multi-pixel cloud retrieval. In this study, we present various RNN-based deep learning models for cloud properties retrieval. Bi-directional Long Short Term Memory with Transformer and Embedding achieves the best outcome in retrieving Cloud Optical Thickness and Cloud Effective Radius through reflectance values, with a distinct improvement from other deep learning algorithms.
+Retrieving cloud microphysics or optical properties  from reflectance is an inverse problem.  Traditional physics-based method uses 1D retrieval to retrieve cloud properties based on the cloud’s three-dimensional (3D) radiative transfer effects. But this method suffers from significant gap between retrieved cloud properties and real cloud properties since 3D radiative-transfer effects affect the radiance values and cloud properties for cloud retrievals.  Recent researches have shown the feasibility of using deep learning models, such as convolutional neural networks and deep feed-forward neural networks, to reduce  retrieval  errors  for  multi-pixel cloud retrieval. In this study, we present various RNN-based deep learning models for cloud properties retrieval. Bi-directional Long Short Term Memory with Transformer and Embedding achieves the best outcome in retrieving Cloud Optical Thickness(COT) and Cloud Effective Radius through reflectance values, with a distinct improvement from other deep learning algorithms.
 
 
 ## Datasets
@@ -16,9 +16,6 @@ Three versions of datasets summerized in Table 1:
 
 13 Features: Solar Azimuth Angle, Solar Zenith Angle, Surface Albedo, View Zenith Angle, Liquid water path, Effective radius, Wavelength, reflectance values, Cloud Optical Thickness, spatial x, spatial y, cloud_top_height(km), cloud_top_height(meters).
 
-* Version 3: COT and CER with varying cloud top and two wavelengths
-
-11 Features: Solar Azimuth Angle, Solar Zenith Angle, Surface Albedo, View Zenith Angle, Liquid water path, Effective radius, Wavelength, reflectance values, Cloud Optical Thickness, spatial x, spatial y
 
 
 ![1640818610(1)](https://user-images.githubusercontent.com/55510330/147709506-c3cb1ecd-f3d1-45e5-babb-9aa32bc09041.png)
