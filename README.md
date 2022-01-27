@@ -29,7 +29,7 @@ We use Dataset 1 and Dataset 2 for Cloud Optical Thickness retrieval:
 ## Pipeline
 ![pipeline](https://user-images.githubusercontent.com/55510330/149815510-5dbae0b2-6530-47c4-b597-6e27546f22d4.png)
 ### Dataset Preparation
-As shown in dataset description above, each dataset is consisted of synthetic cloud profiles, and each synthetic cloud profile contains radiance values and COT values. For example, each demo cloud profile here has 4096 radiance values (input for deep learning models) and 4096 COT values （target output for deep learning models). The current resolution is 10m. We average reflectance data to 500m resolution and 1000m resolution before feeding them to the deep learning models. As a result, there are 82 (4096/50≈82)radiance values and 41(4096/100≈41) radiance values in each synthetic cloud profile, respectfully. The dataset preprocessing code prepares the dataset which will be used for the following deep learning models training and testing. For dataset preprocessing code, please refer to `3D_cloud_retrieval/COT retrieval_Dataset1&2/Dataset_preparation.py`. 
+As shown in dataset description above, each dataset is consisted of synthetic cloud profiles, and each synthetic cloud profile contains radiance values and COT values. For example, each demo cloud profile here has 4096 radiance values (input for deep learning models) and 4096 COT values （target output for deep learning models). The current resolution is 10m. We average reflectance data to 500m resolution and 1000m resolution before feeding them to the deep learning models. As a result, there are 82 (4096/50≈82)radiance values and 41(4096/100≈41) radiance values in each synthetic cloud profile, respectfully. The dataset preprocessing code prepares the dataset which will be used for the following deep learning models training and testing. For dataset preprocessing code, please refer to `3D_cloud_retrieval/COT_retrieval_Dataset1&2/Dataset_preparation.py`. 
 
 ### Models Training
 
@@ -60,7 +60,7 @@ The deep learning model to retrieve COT and CER together is as the following:
 ### Structure of deep learning model of retrieving COT and CER simultaneously
 ![cer and cot retrieval structure1](https://user-images.githubusercontent.com/55510330/151222566-d017cfd2-56f0-460e-a5b6-1436aa0c12b1.png)
 ### Models Testing
-After training any of the RNN-based deep learning model, you may run `3D_cloud_retrieval/COT retrieval_Dataset1&2/test.py` for testing. The predicted COT retrieval will be saved. You can also visualize the comparison among original COT, deep learning retrieved COT and 1D retrieval results. 
+After training any of the RNN-based deep learning model, you may run `3D_cloud_retrieval/COT_retrieval_Dataset1&2/test.py` for testing. The predicted COT retrieval will be saved. You can also visualize the comparison among original COT, deep learning retrieved COT and 1D retrieval results. 
 ## Required Packages
 * tf-nightly 2.7.0.dev20210801
 * keras-nightly 2.7.0.dev2021081000   
