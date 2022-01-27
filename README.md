@@ -29,7 +29,10 @@ As shown in dataset description above, each dataset is consisted of synthetic cl
 
 ### Models Training
 
-The deep learning models for retrieving Cloud Optical Thickness are as follows:
+The deep learning models for retrieving Cloud Optical Thickness are as follows. To train model:
+'''
+python main.py --radiance_file_name data_reflectance.h5 --cot_file_name data_cot.h5
+'''
 
 A. DNN-based model (Okamura et al.) `3D_cloud_retrieval/COT_retrieval_Dataset1&2/DNN.py`
 
