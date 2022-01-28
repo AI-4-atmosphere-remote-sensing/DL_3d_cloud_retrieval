@@ -30,13 +30,13 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--cot_file_name', type=str, required=True,help='Output h5 file')
+parser.add_argument('--cot_file_name', type=str, required=True,help='Output (predicted COT) h5 file')
 parser.add_argument('--path_1d_retrieval', type=str, required=True,help='1D retrieval files path')
 parser.add_argument('--path_model', type=str, required=True,help='trained model path')
-parser.add_argument('--path_predictions', type=str, required=True,help='predictions saved path')
+parser.add_argument('--path_predictions', type=str, required=True,help='predicted COT values saved in a numpy file')
 parser.add_argument('--radiance_test', type=str, required=True,help='radiance test data')
-parser.add_argument('--cot_test', type=str, required=True,help='cot test data')
-parser.add_argument('--path_plots', type=str, required=True,help='results visualization plots path')
+parser.add_argument('--cot_test', type=str, required=True,help='COT test data')
+parser.add_argument('--path_plots', type=str, required=True,help='sample visualized results plots path')
 args = parser.parse_args()
 
 
@@ -71,7 +71,7 @@ print('RMSE on this test set:', rmse)
 predicted_1d_82=np.zeros((os), dtype=float)
 for i in range(num):
     if np.array_equal(test_sample,c[i]):
-        print('profile',i+1)
+        print('The visualized sample test profile is profile',i+1)
         profile_number=i+1
         fname = args.path_1d_retrieval+"//profile_%05d.hdf5"%(i+1)
         hf = h5py.File(fname, 'r')
