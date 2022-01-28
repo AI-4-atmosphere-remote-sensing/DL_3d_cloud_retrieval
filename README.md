@@ -75,7 +75,6 @@ python test.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved_COT/ --
 ```
 conda create --name dl_3d_cloud_retrieval_env python=3.7
 conda activate dl_3d_cloud_retrieval_env
-conda install cudnn
 git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval
 cd DL_3d_cloud_retrieval
 pip install -r requirements.txt
