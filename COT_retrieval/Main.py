@@ -62,12 +62,16 @@ ts=os
 
 #train test split for five-fold cross validation-----
 X_train,X_test,y_train,y_test=cross_val(r,c,ts,os,n_folds=5)
-
-
-
-
-np.save('X_test.npy',X_test)
-np.save('y_test.npy',y_test)
+np.save('X_test_1.npy',X_test[0])
+np.save('X_test_2.npy',X_test[1])
+np.save('X_test_3.npy',X_test[2])
+np.save('X_test_4.npy',X_test[3])
+np.save('X_test_5.npy',X_test[4])
+np.save('y_test_1.npy',y_test[0])
+np.save('y_test_2.npy',y_test[1])
+np.save('y_test_3.npy',y_test[2])
+np.save('y_test_4.npy',y_test[3])
+np.save('y_test_5.npy',y_test[4])
 
 
 
