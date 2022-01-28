@@ -24,63 +24,56 @@ import h5py
 from sklearn.utils import shuffle
 from sklearn.model_selection import KFold
 from utility import cross_val
+import argparse
 
 
 
 
-fname_c = "data_cot.h5"
-path_1d_retrieval="D:\\code\\Fiona\\climate project\\New Data\\retrieved_COT"
-fgnm1 = "plots/predict_Bi-LSTM_with_transformer_embedding_SZA=60_VZA=0_500m_comparing_original_and_DL_retrieved"
-fgnm2 = "plots/comparison_1D_retrieval_Bi-LSTM_with_transformer_embedding_SZA=60_VZA=0_500m"
-path_model="saved_model/bilstm_transformer_embedding/model(1).h5"
-plot_title_1="Bi-LSTM with Transformer Embedding: True COT vs Predicted COT"
-plot_title_2="Bi-LSTM with Transformer Embedding: True COT vs 3D Retrieval vs 1D Retrieval"
-predictions_name='Bi-LSTM_with_transformer_embedding_predictions.npy'
+parser = argparse.ArgumentParser()
+parser.add_argument('--cot_file_name', type=str, required=True,help='Output h5 file')
+parser.add_argument('--path_1d_retrieval', type=str, required=True,help='1D retrieval files path')
+parser.add_argument('--path_model', type=str, required=True,help='trained model path')
+parser.add_argument('--path_predictions', type=str, required=True,help='predictions saved path')
+parser.add_argument('--radiance_test', type=str, required=True,help='radiance test data')
+parser.add_argument('--cot_test', type=str, required=True,help='cot test data')
+parser.add_argument('--path_plots', type=str, required=True,help='results visualization plots path')
+args = parser.parse_args()
+
+
+
+
+
 num=4000
-test_num=800
 os=82
 
-hf_c = h5py.File(fname_c, 'r')
+hf_c = h5py.File(args.cot_file_name, 'r')
 c=hf_c['dataset_cot']
 c=c[:]
 
 #load test data-----
-X_test=np.load('X_test.npy')
-y_test=np.load('y_test.npy')
-X_test_1=X_test[0]
-X_test_2=X_test[1]
-X_test_3=X_test[2]
-X_test_4=X_test[3]
-X_test_5=X_test[4]
-y_test_1=y_test[0]
-y_test_2=y_test[1]
-y_test_3=y_test[2]
-y_test_4=y_test[3]
-y_test_5=y_test[4]
-
-test_image=X_test_1
-test_label=y_test_1
+test_image=np.load(args.radiance_test)
+test_label=np.load(args.cot_test)
 test_sample=test_label[-1]
 
 
 
-# test the trained model-----
-new_model = tf.keras.models.load_model(path_model)
+
+new_model = tf.keras.models.load_model(args.path_model)
 loss,mse,rmse=new_model.evaluate(test_image, test_label)
 predictions=new_model.predict(test_image)
-np.save(predictions_name,predictions)
+np.save(args.path_predictions,predictions)
 print('MSE on this test set:', mse)
 print('RMSE on this test set:', rmse)
 
 
 
-# find the corresponding 1D retrieval profile of the sample test file
+
 predicted_1d_82=np.zeros((os), dtype=float)
 for i in range(num):
     if np.array_equal(test_sample,c[i]):
         print('profile',i+1)
         profile_number=i+1
-        fname = path_1d_retrieval+"//profile_%05d.hdf5"%(i+1)
+        fname = args.path_1d_retrieval+"//profile_%05d.hdf5"%(i+1)
         hf = h5py.File(fname, 'r')
         predicted_1d=hf.get('Retrieved_tau')
         predicted_1d=np.array(predicted_1d)
@@ -97,27 +90,27 @@ predict=np.zeros((os))
 predict=predictions[-1]
 # visualization of comparing original COT and deep learning retrieved COT -----
 figure(figsize=(20, 8), dpi=80)
-plt.title(plot_title_1,fontsize=25)
+plt.title('True COT vs Predicted COT',fontsize=25)
 plt.plot(range(82),test_sample,alpha=0.8,color="blue") 
 plt.plot(range(82),predict,alpha=0.8,color="green") 
 plt.legend(["True", "Predicted"],fontsize=15)
 plt.ylabel(r"Profile_%d"%(profile_number),fontsize=20)
 plt.xlabel('X',fontsize=20)
-plt.savefig(fgnm1+".png",dpi=300,bbox_inches='tight')
+plt.savefig(args.path_plots+"comparing_original_and_DL_retrieved.png",dpi=300,bbox_inches='tight')
 
 
 
 
 # visualization of comparing among 1D retrieval result(physics method) deep learning retrieved COT and original COT ------
 figure(figsize=(20, 8), dpi=80)
-plt.title(plot_title_2,fontsize=25)
+plt.title('True COT vs 3D Retrieval vs 1D Retrieval',fontsize=25)
 plt.plot(range(82),test_sample,alpha=0.8,color="blue") 
 plt.plot(range(82),predict,alpha=0.8,color="green") 
 plt.plot(range(82),predicted_1d_82,alpha=0.8,color="red")
 plt.legend(["True", "3D",'1D'],fontsize=15)
 plt.ylabel(r"Profile_%d"%(profile_number),fontsize=20)
 plt.xlabel('X',fontsize=20)
-plt.savefig(fgnm2+".png",dpi=300,bbox_inches='tight')
+plt.savefig(args.path_plots+"comparing_with_1d_retrieval.png",dpi=300,bbox_inches='tight')
 
 
 
