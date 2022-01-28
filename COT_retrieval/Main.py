@@ -78,7 +78,6 @@ np.save('y_test_5.npy',y_test[4])
 
 # train model-----
 def main():
-
     for n in range(n_folds):
         train_image,train_label= X_train[n],y_train[n]
         model,history= dl_model.eval_model(train_image,train_label,n)
