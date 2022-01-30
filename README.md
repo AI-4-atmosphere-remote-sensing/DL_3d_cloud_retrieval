@@ -57,7 +57,7 @@ After training any of the RNN-based deep learning model, you may run `3D_cloud_r
 
 To test trained model:
 ```
-python test.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved_COT/ --path_model=saved_model/bilstm_transformer_embedding/model(1).h5 --path_predictions=saved_model/bilstm_transformer_embedding/predictions.npy --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/bilstm_with_transformer_embedding/
+python test.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved_COT/ --path_model=saved_model/bilstm_transformer_embedding/model(1).h5 --path_predictions=saved_model/bilstm_transformer_embedding/ --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/bilstm_with_transformer_embedding/
 ```
 
 ## Experiments results
