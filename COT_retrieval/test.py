@@ -61,7 +61,7 @@ test_sample=test_label[-1]
 new_model = tf.keras.models.load_model(args.path_model)
 loss,mse,rmse=new_model.evaluate(test_image, test_label)
 predictions=new_model.predict(test_image)
-np.save(args.path_predictions,predictions)
+np.save(args.path_predictions+'predictions.npy',predictions)
 print('MSE on this test set:', mse)
 print('RMSE on this test set:', rmse)
 
