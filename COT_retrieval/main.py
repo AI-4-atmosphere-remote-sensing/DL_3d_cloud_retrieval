@@ -35,8 +35,8 @@ from utility import cross_val
 import argparse
 
 
-model_names=['BiLSTM_Transformer_embedding','LSTM','BiLSTM_with_Transformer','BiLSTM','BiLSTM_embedding','LSTM_embedding','LSTM_with_Transformer','Transformer']
-inputnames=input("Please choose which model you want to use. Type 0 for BiLSTM_Transformer_embedding, 1 for LSTM, 2 for BiLSTM_with_Transformer, 3 for BiLSTM, 4 for BiLSTM_embedding, 5 for LSTM_embedding, 6 for LSTM_with_Transformer, 7 for Transformer")
+model_names=['bilstm_transformer_embedding','lstm','bilstm_with_transformer','bilstm','bilstm_embedding','lstm_embedding','lstm_with_transformer','transformer']
+inputnames=input("Please choose which model you want to use. Type 0 for bilstm_transformer_embedding, 1 for lstm, 2 for bilstm_with_transformer, 3 for bilstm, 4 for bilstm_embedding, 5 for lstm_embedding, 6 for lstm_with_transformer, 7 for transformer")
 dl_model=__import__(model_names[int(inputnames)])
 
 parser = argparse.ArgumentParser()
