@@ -9,7 +9,7 @@ This code is for testing the trained RNN-based model of single-view COT retrieva
 
 The dataset used for this model are:
 Cloud Optical Thickness (Ground-truth):'data_cot.h5'
-It is the output from running the dataset preparing code, 'Dataset preparation.py'. 
+It is the output from running the dataset preparing code, 'dataset preparation.py'. 
 
 '''
 
