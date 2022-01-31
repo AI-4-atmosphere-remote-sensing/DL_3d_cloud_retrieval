@@ -10,7 +10,7 @@ The datasets used for this model are:
 Radiance (Input): 'data_reflectance.h5'
 Cloud Optical Thickness (Ground-truth):'data_cot.h5'
 
-They are the results from running the dataset preparing code, 'Dataset_preparation.py'. 
+They are the results from running the dataset preparing code, 'dataset_preparation.py'. 
 
 '''
 
