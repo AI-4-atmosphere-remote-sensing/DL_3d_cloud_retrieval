@@ -34,21 +34,21 @@ The deep learning models for retrieving Cloud Optical Thickness are as follows. 
 python main.py --radiance_file_name=data_reflectance.h5 --cot_file_name=data_cot.h5
 ```
 
-A. DNN-based model (Okamura et al.) `DL_3d_cloud_retrieval/COT_retrieval/DNN.py`
+A. DNN-based model (Okamura et al.) `DL_3d_cloud_retrieval/COT_retrieval/dnn.py`
 
-B. CNN-based model (Angelof et al.) `DL_3d_cloud_retrieval/COT_retrieval/CNN.py`
+B. CNN-based model (Angelof et al.) `DL_3d_cloud_retrieval/COT_retrieval/cnn.py`
 
 C. Our proposed RNN-based models:
-* BiLSTM with Transformer and Embedding `DL_3d_cloud_retrieval/COT_retrieval/BiLSTM_Transformer_embedding.py`
+* BiLSTM with Transformer and Embedding `DL_3d_cloud_retrieval/COT_retrieval/bilstm_transformer_embedding.py`
 ### Structure of deep learning model of retreiving COT: BiLSTM with Transformer and Embedding
 ![BiLSTM transformer embedding (1)](https://user-images.githubusercontent.com/55510330/151221487-98c05139-8bb8-4af9-9158-155f415e9f00.png)
-* BiLSTM with Transformer `DL_3d_cloud_retrieval/COT_retrieval/BiLSTM_with_Transformer.py`
-* Transformer `DL_3d_cloud_retrieval/COT_retrieval/Transformer.py`
-* LSTM with Transformer `DL_3d_cloud_retrieval/COT_retrieval/LSTM_with_Transformer.py`
-* BiLSTM with Embedding `DL_3d_cloud_retrieval/COT_retrieval/BiLSTM_embedding.py`
-* LSTM with Embedding `DL_3d_cloud_retrieval/COT_retrieval/LSTM_embedding.py`
-* BiLSTM `DL_3d_cloud_retrieval/COT_retrieval/BiLSTM.py`
-* LSTM `DL_3d_cloud_retrieval/COT_retrieval/LSTM.py`
+* BiLSTM with Transformer `DL_3d_cloud_retrieval/COT_retrieval/bilstm_with_transformer.py`
+* Transformer `DL_3d_cloud_retrieval/COT_retrieval/transformer.py`
+* LSTM with Transformer `DL_3d_cloud_retrieval/COT_retrieval/lstm_with_transformer.py`
+* BiLSTM with Embedding `DL_3d_cloud_retrieval/COT_retrieval/bilstm_embedding.py`
+* LSTM with Embedding `DL_3d_cloud_retrieval/COT_retrieval/lstm_embedding.py`
+* BiLSTM `DL_3d_cloud_retrieval/COT_retrieval/bilstm.py`
+* LSTM `DL_3d_cloud_retrieval/COT_retrieval/lstm.py`
 
 Bi-directional Long Short Term Memory with Transformer and Embedding achieves the best outcome in terms of COT retrieval. Hyperparameters fine-tuning is not included in these models as this process was done off-line. 
 
