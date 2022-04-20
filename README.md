@@ -70,7 +70,6 @@ python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved
 ## Required Packages
 * python 3.7
 * tf-nightly 
-* keras-nightly 
 * scikit-learn
 * matplotlib 3.3.4            
 * numpy 1.20           
