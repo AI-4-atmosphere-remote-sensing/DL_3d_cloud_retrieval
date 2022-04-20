@@ -59,7 +59,8 @@ To test trained model by using the original data:
 ```
 python test.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved_COT/ --path_model=saved_model/bilstm_transformer_embedding/model(1).h5 --path_predictions=saved_model/bilstm_transformer_embedding/ --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/bilstm_with_transformer_embedding/
 ```
-path_model refers to the path of the saved model you want to run. path_1d_retrieval refers to the path of 1D retrieval results, which were done by the Physics team at UMBC. 
+path_model: the path of the saved model you want to run. 
+path_1d_retrieval: the path of 1D retrieval results, which were finished by the Physics team at UMBC. 
 
 To test trained model by using the example data provided in this GitHub repositary:
 ```
