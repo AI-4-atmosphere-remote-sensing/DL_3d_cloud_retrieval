@@ -74,7 +74,8 @@ python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved
 * scikit-learn
 * matplotlib 3.3.4            
 * numpy 1.19.2           
-* h5py 3.1.0           
+* h5py 3.1.0
+* cudnn 8.1.0           
 
 ### Install
 ```
