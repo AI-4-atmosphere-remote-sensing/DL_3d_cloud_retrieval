@@ -75,7 +75,7 @@ python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved
 * matplotlib 3.3.4            
 * numpy 1.20           
 * h5py 3.1.0
-* cudnn 8.2.1          
+* cudnn         
 
 ### Install
 ```
