@@ -57,13 +57,13 @@ After training any of the RNN-based deep learning model, you may run `DL_3d_clou
 
 To test trained model by using the original data:
 ```
-python test.py --cot_file_name=data_cot.h5 --path_1d_retrieval=example/retrieved_COT/ --path_model=saved_model/bilstm_transformer_embedding/model1.h5 --path_predictions=saved_model/bilstm_transformer_embedding/ --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/bilstm_with_transformer_embedding/
+python test.py --cot_file_name=data_cot.h5 --path_1d_retrieval=example/retrieved_COT/ --path_model=saved_model/bilstm_transformer_embedding/model1.h5 --path_predictions=predictions/bilstm_transformer_embedding/ --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/bilstm_with_transformer_embedding/
 ```
 Note you can supply: the path of a saved model you want to run into directory --path_model; the path of 1D retrieval results into directory --path_1d_retrieval. The retrieved results will be saved at the specified directory you defined --path_predictions, and visualization results will be saved at the specified directory you defined --path_plots.
 
 To test trained model by using the example data provided in this GitHub repositary:
 ```
-python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=example/retrieved_COT/ --path_model=saved_model/lstm/model1.h5 --path_predictions=saved_model/lstm/ --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/lstm/
+python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=example/retrieved_COT/ --path_model=saved_model/lstm/model1.h5 --path_predictions=predictions/lstm/ --radiance_test=X_test_1.npy --cot_test=y_test_1.npy --path_plots=plots/lstm/
 ```
 
 ## Experiments results
