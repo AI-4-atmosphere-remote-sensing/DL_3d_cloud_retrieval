@@ -68,6 +68,6 @@ def eval_model(train_image, train_label,n):
     history = model.fit(train_image,train_label,batch_size = bsize,epochs = eps,validation_split=0.125,
                               callbacks =[earlystopping])
 
-    model.save(path_model+'/model(%.f).h5'%(n+1))
+    model.save(path_model+'/model%d.h5'%(n+1))
     return model,history
     
