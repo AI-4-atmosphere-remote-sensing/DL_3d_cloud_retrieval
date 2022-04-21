@@ -93,7 +93,7 @@ conda activate dl_3d_cloud_retrieval_env
 git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval
 cd DL_3d_cloud_retrieval
 conda install -c conda-forge cudnn=8.0.5
-pip install -r requirements.txt
+pip install -r requirements2.txt
 
 ```
 
