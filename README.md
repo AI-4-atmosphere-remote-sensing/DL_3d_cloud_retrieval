@@ -86,7 +86,7 @@ cd DL_3d_cloud_retrieval
 pip install -r requirements.txt
 conda install cudnn
 ```
-Alternatively,you can also install
+Alternatively, you can also install
 ```
 conda create --name dl_3d_cloud_retrieval_env python=3.7
 conda activate dl_3d_cloud_retrieval_env
