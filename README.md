@@ -70,7 +70,7 @@ python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=retrieved
 ![c68440eee1e9637798007125c35a05d](https://user-images.githubusercontent.com/55510330/151385336-87c770d8-04ef-4fd5-8527-13240829e15b.png)
 ## Required Packages
 * python 3.7
-* tf-nightly 
+* tf-nightly or tensorflow
 * scikit-learn
 * matplotlib 3.3.4            
 * numpy 1.20           
@@ -85,6 +85,16 @@ git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieva
 cd DL_3d_cloud_retrieval
 pip install -r requirements.txt
 conda install cudnn
+```
+Alternatively,you can also install
+```
+conda create --name dl_3d_cloud_retrieval_env python=3.7
+conda activate dl_3d_cloud_retrieval_env
+git clone https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval
+cd DL_3d_cloud_retrieval
+conda install -c conda-forge cudnn=8.0.5
+pip install -r requirements.txt
+
 ```
 
 ## Contributors
