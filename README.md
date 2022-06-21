@@ -68,6 +68,8 @@ python test_example.py --cot_file_name=data_cot.h5 --path_1d_retrieval=example/r
 
 ## Experiments results
 ![c68440eee1e9637798007125c35a05d](https://user-images.githubusercontent.com/55510330/151385336-87c770d8-04ef-4fd5-8527-13240829e15b.png)
+![2a2cd96c36750f5901ee405d3f7a4cc](https://user-images.githubusercontent.com/55510330/174790259-880914c2-6db7-40fa-8706-22588aca1048.png)
+
 ## Required Packages
 * python 3.7
 * tf-nightly or tensorflow
