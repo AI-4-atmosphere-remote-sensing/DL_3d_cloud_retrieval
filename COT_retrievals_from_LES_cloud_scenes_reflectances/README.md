@@ -4,17 +4,17 @@ In this GitHub repositary, you will find information on how to preprocess the ra
 
 
 ## Create conda environment
-conda create -n cot_retrieval python=3.9 
-conda activate cot_retrieval
+* conda create -n cot_retrieval python=3.9 
+* conda activate cot_retrieval
 
 ### Install Dependencies
-Install Pytorch: conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
-Install Torchinfo (1.7.1): pip install torchinfo
-Install matplotlib (3.6.1): pip install matplotlib
-Install mmcv (1.6.2): pip install mmcv
-Install scikit-learn (): pip install scikit-learn [please ignore the following error message: ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts. nltk 3.7 requires click, which is not installed. nltk 3.7 requires tqdm, which is not installed. ]
-Install h5py: pip install h5py
-Install pytorchtools: pip install pytorchtools
+* Install Pytorch: conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+* Install Torchinfo (1.7.1): pip install torchinfo
+* Install matplotlib (3.6.1): pip install matplotlib
+* Install mmcv (1.6.2): pip install mmcv
+* Install scikit-learn (): pip install scikit-learn [please ignore the following error message: ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts. nltk 3.7 requires click, which is not installed. nltk 3.7 requires tqdm, which is not installed. ]
+* Install h5py: pip install h5py
+
 
 
 ## Data Preparation
