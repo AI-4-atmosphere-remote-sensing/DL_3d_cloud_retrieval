@@ -47,7 +47,7 @@ Create directories here and place the model inside the directoy. It should look 
 
 To test trained model by using the example data provided in this GitHub repositary:
 ```
-python test_example.py --model_arch cloudunet --model_filename cloudunet.pth 
+python test.py --model_arch cloudunet --model_filename cloudunet.pth 
 ```
 Set the model_arch name to [okamura] and model_filename to [okamura.pth] to test the okamura model.
 
