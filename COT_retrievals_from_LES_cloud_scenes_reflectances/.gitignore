@@ -127,8 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-<<<<<<< HEAD
 
 saved_model
-=======
->>>>>>> a44d81a6a9c2594be7ba9c3a6ddf1d242c3c07a7
