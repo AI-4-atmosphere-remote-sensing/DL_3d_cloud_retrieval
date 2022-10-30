@@ -41,7 +41,7 @@ To test trained model by using the example data provided in this GitHub reposita
 ```
 python test_example.py --model_arch cloudunet --model_filename cloudunet.pth 
 ```
-Change the model_arch name to [okamura] and model_filename to [okamura.pth] to test the okamura model.
+Set the model_arch name to [okamura] and model_filename to [okamura.pth] to test the okamura model.
 
 ## Contributors
 * Zahid Hassan Tushar, Department of Information Systems, University of Maryland Baltimore County, <ztushar1@umbc.edu>
