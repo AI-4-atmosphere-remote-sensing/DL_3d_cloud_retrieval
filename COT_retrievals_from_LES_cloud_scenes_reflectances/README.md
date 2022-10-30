@@ -39,6 +39,7 @@ bash train.sh $gpu/cpu $model_arch
 ### Models Testing
 Download the pretrained model from the following URL.
 ```
+https://drive.google.com/drive/folders/1_vLSWM-tCpAFwfGfZaJfLhOJayefwE-9?usp=sharing
 ```
 Create directories here and place the model inside the directoy. It should look like this.
 * saved_model/cloudunet/cloudunet.pth
