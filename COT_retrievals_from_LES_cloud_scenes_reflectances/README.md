@@ -37,6 +37,13 @@ bash train.sh $gpu/cpu $model_arch
 * $model_arch == Specify the model architecture. e.g., [cloudunet]
 
 ### Models Testing
+Download the pretrained model from the following URL.
+```
+```
+Create directories here and place the model inside the directoy. It should look like this.
+* saved_model/cloudunet/cloudunet.pth
+* saved_model/okamura/okamura.pth
+
 To test trained model by using the example data provided in this GitHub repositary:
 ```
 python test_example.py --model_arch cloudunet --model_filename cloudunet.pth 
