@@ -21,11 +21,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 torch.manual_seed(0)
 
+
 from utilities import NasaDataset
 from utilities import train_model,test_model, get_root_logger,collect_env
 from model_config import DNN2w, EncoderDecoder, DnCNN, DnCNNmod, CloudUNet 
 
+import torch.multiprocessing as mp
+from torch.utils.data.distributed import DistributedSampler
+from torch.nn.parallel import DistributedDataParallel as DDP
+#from torch.distributed import init_process_group, destroy_process_group
+import torch.distributed as dist
 
+'''
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a model')
     parser.add_argument('--device', type=int,  default=None, help='CUDA')
@@ -35,19 +42,60 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def main():
-    # Parse the arguments
-    args = parse_args()
+'''
 
+def init_distributed(args):
+    '''
+    if 'RANK' in os.environ and 'WORLD_SIZE' in os.environ:
+      args.world_size = int(os.environ['WORLD_SIZE'])
+      args.gpu = int(os.environ['LOCAL_RANK'])
+    else:
+        print('Not using distributed mode')
+        args.gpu = 0
+        args.distributed = False
+        return
+    '''
+    
+    if 'RANK' in os.environ and 'WORLD_SIZE' in os.environ:
+        args.world_size = int(os.environ['WORLD_SIZE'])
+        args.gpu = int(os.environ['LOCAL_RANK'])
+        
+    else:
+        print('Not using distributed mode')
+        args.gpu = 0
+        args.distributed = False
+        return
+    
+    if not torch.distributed.is_initialized():
+        torch.cuda.set_device(args.gpu)
+        torch.distributed.init_process_group(backend='nccl', init_method='env://')
+    else:
+        print('Distributed mode is already initialized')
+    
+    if not torch.distributed.is_initialized():
+        torch.cuda.set_device(args.gpu)
+        os.environ['MASTER_ADDR'] = '127.0.0.1'
+        os.environ['MASTER_PORT'] = '6005'
+        dist.init_process_group(backend='nccl', init_method='env://', world_size=args.world_size)
+    else:
+        print('Distributed mode is already initialized')
+
+    args.distributed = True
+    torch.cuda.set_device(args.gpu)
+    dist.barrier()
+
+
+def main(args):
     # Check if the GPU is available
-    device = torch.device(args.device) if torch.cuda.is_available() else torch.device("cpu")
-    print(f'Main Selected device: {device}')
+    #device = torch.device(args.device) if torch.cuda.is_available() else torch.device("cpu")
+    #print(f'Main Selected device: {device}')    
 
-
-    lr   = args.lr
+    
+    #lr   = args.lr
     # Load and Batch the Data
-    batch_size = args.batch_size
-    model_name = args.model_name
+    batch_size = 10
+    model_name = "okamura"
+
 
     # Train model with five fold cross validation
     data_dir="preprocessed_data/Cloud_25"
@@ -57,7 +105,7 @@ def main():
     cv_valid_losses = []
     cv_valid_mse_losses = []
     cv_test_losses   = []
-    for i in range (5):
+    for i in range (1):
 
         # Specify the Model
         cp = False
@@ -95,15 +143,20 @@ def main():
         Y_valid = np.load(fname_Y_valid)
         Y_test = np.load(fname_Y_test)
 
+        
+
         train_data = NasaDataset(dataset_name=dataset_name,fold =i, X=X_train, Y= Y_train,cropped=cp,transform=True)
         valid_data = NasaDataset(dataset_name=dataset_name,fold =i, X=X_valid, Y= Y_valid,cropped=cp,transform=True)
         test_data  = NasaDataset(dataset_name=dataset_name,fold =i, X=X_test, Y= Y_test,cropped=cp,transform=True)
 
-
-
-        train_loader = DataLoader(train_data, batch_size=batch_size,shuffle=True)
-        valid_loader = DataLoader(valid_data, batch_size=batch_size,shuffle=True)
-        test_loader = DataLoader(test_data, batch_size=batch_size,shuffle=True)
+        init_distributed(args)
+           
+        sampler_test =  DistributedSampler(train_data, shuffle=False)
+        train_loader = DataLoader(train_data, batch_size=10,sampler=sampler_test)
+        sampler_valid =  DistributedSampler(valid_data, shuffle=False)
+        valid_loader = DataLoader(valid_data, batch_size=10,sampler=sampler_valid)
+        sampler_test =  DistributedSampler(test_data, shuffle=False)
+        test_loader = DataLoader(test_data, batch_size=10,sampler=sampler_test)
 
 
 
@@ -130,7 +183,7 @@ def main():
             "saved_model_path":saved_model_path,
             "batch_size":batch_size,
             "optimizer":"Adam",
-            "lr":lr,
+            "lr":0.01,
             "loss": "MSE",
             "scheduler" :"ReduceLR",
             "num_epochs" : 5,
@@ -147,9 +200,11 @@ def main():
 
 
         ########################################## Start Training ############################################
-        model, train_loss, valid_loss, valid_mse_loss = train_model(model,train_loader,valid_loader, params, device,log_level)
+        device = args.gpu
+        model, train_loss, valid_loss, valid_mse_loss = train_model(model,train_loader,valid_loader, params,device,log_level)
         cv_valid_losses.append(valid_loss[len(valid_loss)-params['patience']-1])
         cv_valid_mse_losses.append(valid_mse_loss[len(valid_mse_loss)-params['patience']-1])
+        
 
 
         # Visualizing the Loss and the Early Stopping Checkpoint
@@ -174,12 +229,13 @@ def main():
         fig.savefig(figname, bbox_inches='tight')
         # Test the Trained Model
 
-        test_loss,_,_,_ = test_model(model, test_loader,params,device,log_level)
+        test_loss,_,_,_ = test_model(model, test_loader,params,args.gpu,log_level)
         cv_test_losses.append(test_loss)
         stop = timeit.default_timer()
 
         print_msg = (f'Time: {(stop-start):.2f}')
         logger.info(print_msg)
+        
     
     mean  = np.mean(cv_valid_losses)
     std   = np.std(cv_valid_losses)
@@ -194,9 +250,20 @@ def main():
     f'  Mean Test loss:  {mean_test_loss:.3f}' +f'  Std Test loss: {std_test_loss:.3f} '+
     f'   Mean Valid MSE Loss: {mse_mean:.3f}'  + f'   Std Valid MSE Loss: {mse_std:.3f}')
     logger.info(print_msg)
+    
 
 
 
 
 if __name__=="__main__":
-    main()
+    #main()
+    parser = argparse.ArgumentParser(description='Train a model')
+    #parser.add_argument('--device', type=int,  default=None, help='CUDA')
+    parser.add_argument('--model_name', type=str,  default=None, help='Model Name')
+    parser.add_argument('--batch_size', type=int,  default=None, help='Batch Size')
+    parser.add_argument('--lr', type=float,  default=None, help='the learning rate')
+    parser.add_argument('--world_size', type=int,  default=None, help='total number of nodes')
+    args = parser.parse_args()
+    main(args)
+    #world_size = torch.cuda.device_count()
+    #mp.spawn(main, args=(world_size, args.model_name, args.batch_size,args.lr), nprocs=world_size)
