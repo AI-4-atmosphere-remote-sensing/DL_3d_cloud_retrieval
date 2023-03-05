@@ -67,11 +67,9 @@ from LES cloud scenes reflectances/
 
 2. COT retrieval source code from the big-data-lab-umbc repository using git:
 https://github.com/AI-4-atmosphere-remote-sensing/DL 3d cloud retrieval.git
-Or
-https://github.com/AI-4-atmosphere-remote-sensing/cloud-phase-prediction.git
 
-Step 3:
-## Data Preparation
+
+Step 5: Data Preparation
 The following bash script processes the raw data which is in hdf format into numpy arrays. It also creates a five fold cross validated dataset. The scripts requires the dataset path.
 
 For data preprocessing, run the following command.
@@ -80,7 +78,7 @@ bash data_preprocess.sh $data_path
 
 
 
-Step 4: To execute the slurm file use the following command:
+Step 6: To execute the slurm file use the following command:
 sbatch train.slurm
 
 How sbatch train.slurm works mentioned below:
@@ -153,13 +151,13 @@ number of nodes and processes per node, The Python script that implements the tr
 The remaining flags (—model name, —batch size, —lr, and —world size) define the
 training job’s hyperparameters.
 
-Step 4: Observe the results:
+Step 7: Observe the results:
 Check the train.slurm 
 Check the job name 
 Slurm.out file name 
 Slurm.err file name 
 
-Step 5: For the output open the slurm.out file use the following command
+Step 8: For the output open the slurm.out file use the following command
 more slurm.out
 
 
