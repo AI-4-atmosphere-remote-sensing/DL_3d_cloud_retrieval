@@ -13,6 +13,6 @@ nvidia-smi
 
 export CUDA_LAUNCH_BLOCKING=1
 
-python main.py --model_name okamura --batch_size 10 --lr 0.01
+torchrun --standalone --nnodes=1 --nproc_per_node=2 main.py  --model_name okamura --batch_size 128 --lr 0.01 --world_size 2
 
 
