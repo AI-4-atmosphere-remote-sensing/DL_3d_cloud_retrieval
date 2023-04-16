@@ -78,10 +78,10 @@ The distributed training task utilizing PyTorch DDP is really conducted with thi
 2. A job should be created after running this command.
 
 # Step 7: Observe the results:
-  a. Check the train_ddp.slurm file. <br />
-  b. Check the job name, output and error file names.  <br />
-  c. Slurm.out file must be created, once the job is successfully implemented. for eg: 128_2slurm.out<br />
-  d. Slurm.err file must be created, once the job is successfully implemented. for eg: 128_2slurm.err<br />
+  1. Check the train_ddp.slurm file. <br />
+  2. Check the job name, output and error file names.  <br />
+  3. Slurm.out file must be created, once the job is successfully implemented. for eg: 128_2slurm.out<br />
+  4. Slurm.err file must be created, once the job is successfully implemented. for eg: 128_2slurm.err<br />
 
 # Step 8: For the output open the slurm.out file use the following command:
  more slurm.out
