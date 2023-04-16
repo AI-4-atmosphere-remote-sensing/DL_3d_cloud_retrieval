@@ -9,16 +9,16 @@
 4. You should be able to log in to the taki cluster successfully.
 
 # Step 2: Conda Environment Set Up:
-1. Set up a directory to install conda.
-2. Use this URL to install the conda: https://docs.conda.io/en/latest/miniconda.html
-    2.1 Detailed steps to install conda set up is mentioned below:
-    2.2 Navigate to URL: https://docs.conda.io/en/latest/miniconda.html
-    2.3 Download and save the Python 3.9 window installer.
-    2.4 Go to the terminal and the directory where to want to install the conda.
-    2.5 Upload the downloaded file to the directory.
-    2.6 To install it with our platform we have a command :
-        sh <filename>
-        for eg: sh  Miniconda3-latest-Linux-x86_64.sh
+1. Set up a directory to install conda. <br />
+2. Use this URL to install the conda: https://docs.conda.io/en/latest/miniconda.html <br />
+    2.1 Detailed steps to install conda set up is mentioned below: <br />
+    2.2 Navigate to URL: https://docs.conda.io/en/latest/miniconda.html <br />
+    2.3 Download and save the Python 3.9 window installer. <br />
+    2.4 Go to the terminal and the directory where to want to install the conda. <br />
+    2.5 Upload the downloaded file to the directory. <br />
+    2.6 To install it with our platform we have a command : <br />
+        sh <filename> <br />
+        for eg: sh  Miniconda3-latest-Linux-x86_64.sh <br />
 3. All the packages should start installing 
 4. Press yes and press enter and the system will try to unpack the miniconda installer for Linux.
 5. Now you can check in the installed packages Python must be downloaded and also some other associated packages.
