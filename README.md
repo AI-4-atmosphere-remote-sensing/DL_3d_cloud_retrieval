@@ -3,7 +3,7 @@ In this GitHub repositary, you will find information on how to preprocess the ra
 
 
 ## Publication
-Read our preprint version of the paper [here!](https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval/blob/main/Publication/CloudUNet%20A%20deep%20learning%20model%20for%20retrieving%20Cloud%20Optical%20Thickness%20from%203D%20LES%20cloud%20fields.pdf "Go to paper link")
+Read our preprint version of the paper [here!](https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval/blob/main/Publication/CloudUNet.pdf "Go to paper link")
 We will update this link when a new version comes out.
 
 ## Citing this repository
