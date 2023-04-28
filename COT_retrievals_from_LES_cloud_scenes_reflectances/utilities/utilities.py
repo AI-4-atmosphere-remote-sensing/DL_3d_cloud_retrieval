@@ -1,9 +1,3 @@
-'''
-    Author: Zahid Hassan Tushar
-    email: ztushar1@umbc.edu
-
-    Write Comment
-'''
 
 # Import libraries
 import argparse
