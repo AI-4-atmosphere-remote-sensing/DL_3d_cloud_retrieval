@@ -112,11 +112,9 @@ def train_model(model, train_loader, valid_loader, params,device,log_level):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("torch.cuda.is_available:", torch.cuda.is_available())
     model = model.to(device)
-    print("model is loaded into device -------garima")
     #model = torch.nn.parallel.DistributedDataParallel(model, device=[device])
     model = DDP(model,device_ids=[device], find_unused_parameters=True)
-    print("model wrapped-----------------garima")
-    
+        
     ### Define the loss function
     if params['loss']=="MSE":
         criterion = torch.nn.MSELoss()
@@ -156,7 +154,6 @@ def train_model(model, train_loader, valid_loader, params,device,log_level):
 
     # initialize the early_stopping object
     early_stopping = EarlyStopping(patience=patience, verbose=True,path=saved_model_path)
-    print("garimaaaaaaaaaaaaa")
     import time
     if torch.cuda.is_available():
         num_gpus = torch.cuda.device_count()
@@ -168,7 +165,6 @@ def train_model(model, train_loader, valid_loader, params,device,log_level):
         ###################
         # train the model #
         ###################
-        print("garimaaaaaaaaaaaaa")
         print(f'Number of epochs: {n_epochs}')
         model.to(device)
         model.train() # prep model for training
