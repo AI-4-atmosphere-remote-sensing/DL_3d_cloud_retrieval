@@ -12,8 +12,18 @@ import logging
 from mmcv.utils import collect_env as collect_base_env
 from mmcv.utils import get_logger
 
+from torch.nn.parallel import DistributedDataParallel as DDP
 
+import os
 
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+# start process 0
+
+#os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
+#os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+
+#os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 
 
@@ -86,14 +96,27 @@ def get_root_logger(log_file=None, log_level=logging.INFO):
     return get_logger('cloud_retrieval', log_file, log_level)
 
 
-def train_model(model, train_loader, valid_loader, params, device,log_level):
+def train_model(model, train_loader, valid_loader, params,device,log_level):
 
     # Assign parameters to variables
     n_epochs        = params['num_epochs']
     lr              = params['lr']
     saved_model_path = params["saved_model_path"] 
     patience        = params["patience"] 
+    
+    #device_id = 0  # set the device ID to 0
 
+    #device = torch.device("cuda", device_id)
+    #torch.cuda.set_device(device)
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print("torch.cuda.is_available:", torch.cuda.is_available())
+    model = model.to(device)
+    print("model is loaded into device -------garima")
+    #model = torch.nn.parallel.DistributedDataParallel(model, device=[device])
+    model = DDP(model,device_ids=[device], find_unused_parameters=True)
+    print("model wrapped-----------------garima")
+    
     ### Define the loss function
     if params['loss']=="MSE":
         criterion = torch.nn.MSELoss()
@@ -133,12 +156,20 @@ def train_model(model, train_loader, valid_loader, params, device,log_level):
 
     # initialize the early_stopping object
     early_stopping = EarlyStopping(patience=patience, verbose=True,path=saved_model_path)
-    
+    print("garimaaaaaaaaaaaaa")
+    import time
+    if torch.cuda.is_available():
+        num_gpus = torch.cuda.device_count()
+    else:
+        num_gpus = 0
     for epoch in range(1, n_epochs + 1):
+        gpu_start_times = [time.time() for _ in range(num_gpus)]
 
         ###################
         # train the model #
         ###################
+        print("garimaaaaaaaaaaaaa")
+        print(f'Number of epochs: {n_epochs}')
         model.to(device)
         model.train() # prep model for training
         for batch, data in enumerate(train_loader, 1):
@@ -183,6 +214,7 @@ def train_model(model, train_loader, valid_loader, params, device,log_level):
 
         # For model comparison with different loss criterion
         avg_valid_mse_losses.append(valid_mse_loss)
+        gpu_end_times = [time.time() for _ in range(num_gpus)]
 
         
 
@@ -194,12 +226,16 @@ def train_model(model, train_loader, valid_loader, params, device,log_level):
                      f'lr: {lr_info}  '                 +
                      f'valid_mse_loss: {valid_mse_loss:.5f}')
         
-        logger.info(print_msg)
-        if epoch%10==0:
-            print(print_msg)
+        for i in range(num_gpus):
+            gpu_start_time = gpu_start_times[i]
+            gpu_end_time = gpu_end_times[i]
+            gpu_time = gpu_end_time - gpu_start_time
+            print_msg += f' gpu{i}_time: {gpu_time:.2f}s (start: {gpu_start_time:.2f}, end: {gpu_end_time:.2f})'
 
         
-
+        logger.info(print_msg)
+        if epoch%10==0:
+            print(print_msg)        
 
         
         # early_stopping needs the validation loss to check if it has decresed, 
@@ -226,6 +262,12 @@ def test_model(model, test_loader,params,device,log_level=None):
     test_losses = []
     mse_losses  = []
     predictions = []
+    device_id = 0  # set the device ID to 0
+
+    #device = torch.device("cuda", device_id)
+    #torch.cuda.set_device(device)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print("torch.cuda.is_available:", torch.cuda.is_available())
     model.to(device)
     model.eval() # prep model for evaluation
     ### Define the loss function
@@ -276,6 +318,12 @@ def get_pred(model,X_test,Y_test,device='cuda'):
     Y_test=numpy array,  dim(10,10,1) or (6,6,1)
     '''
     criterion = torch.nn.MSELoss()
+    #device_id = 0  # set the device ID to 0
+
+    #device = torch.device("cuda", device_id)
+    #torch.cuda.set_device(device)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print("torch.cuda.is_available:", torch.cuda.is_available())
     model.to(device)
     model.eval() # prep model for evaluation
 
