@@ -1,7 +1,7 @@
 '''
     Author: Xiangyang Meng
     Email: xmeng1@umbc.edu
-    This code is for LSTM model.
+    This code is for BiLSTM with Embedding model to be used with Dataset 3 and Dataset 4.
 '''
 import tensorflow as tf
 import psutil
