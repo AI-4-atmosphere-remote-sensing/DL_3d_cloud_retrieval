@@ -78,6 +78,14 @@ def init_distributed(args):
     torch.cuda.set_device(args.gpu)
     dist.barrier()
 
+### Importing wandb for profiling the training
+import wandb
+
+
+### When running for the first time; You need to create account in wandb website and use your api key
+#### https://wandb.ai/site
+wandb.login(key="YOUR API KEY")
+
 
 def main(args):
     # Check if the GPU is available
@@ -258,6 +266,11 @@ if __name__=="__main__":
     parser.add_argument('--lr', type=float,  default=None, help='the learning rate')
     parser.add_argument('--world_size', type=int,  default=None, help='total number of nodes')
     args = parser.parse_args()
+
+    wandb.init(project="COT_retrievals", name="test1", config=args)
+    
     main(args)
     #world_size = torch.cuda.device_count()
     #mp.spawn(main, args=(world_size, args.model_name, args.batch_size,args.lr), nprocs=world_size)
+
+    wandb.finish()
