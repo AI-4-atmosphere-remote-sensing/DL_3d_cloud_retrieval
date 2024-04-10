@@ -15,6 +15,7 @@ conda activate cot_retrieval
 * Install mmcv (1.6.2): ```pip install mmcv``` [If you face error regarding mmcv when running, try ```pip install mmcv-full``` ]
 * Install scikit-learn (): ```pip install scikit-learn``` [please ignore the following error message: ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts. nltk 3.7 requires click, which is not installed. nltk 3.7 requires tqdm, which is not installed. ]
 * Install h5py: ```pip install h5py```
+* Install wandb: ```pip install wandb``` [We have used wandb to profile the training, please refer to https://docs.wandb.ai/ for more information.]
 
 
 
