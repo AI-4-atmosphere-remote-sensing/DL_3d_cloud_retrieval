@@ -8,6 +8,8 @@ import torch
 from torch.optim import Adam,SGD, lr_scheduler
 from torch.utils.data import DataLoader
 
+import wandb
+
 import logging
 from mmcv.utils import collect_env as collect_base_env
 from mmcv.utils import get_logger
@@ -189,6 +191,9 @@ def train_model(model, train_loader, valid_loader, params,device,log_level):
             # record training loss
             train_losses.append(loss.item())
 
+            wandb.log({"epoch": epoch, "train_loss": loss.item()})
+
+
            
         lr_info =optimizer.param_groups[0]['lr']
         ######################    
@@ -298,6 +303,8 @@ def test_model(model, test_loader,params,device,log_level=None):
 
     test_loss = np.average(test_losses)
     mse_loss  = np.average(mse_losses)
+
+    wandb.log({"test_loss": test_loss, "mse_loss": mse_loss})
 
     print_msg = ('Test Loss: {:.6f}\n'.format(test_loss))
     print(print_msg)
