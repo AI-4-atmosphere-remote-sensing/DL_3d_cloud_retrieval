@@ -276,7 +276,7 @@ def test_model(model, test_loader,params,device,log_level=None):
     return test_loss,test_losses, predictions,mse_loss
 
 
-def get_pred(model,X_test,Y_test,device='cuda'):
+def get_pred(model,X_test,Y_test,device='cuda'): # for cpu use: <torch.device('cpu')> instead of <'cuda'>
     '''
     measures each image separately
     X_test=numpy array , dim (10,10,2)
