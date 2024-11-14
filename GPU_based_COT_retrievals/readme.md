@@ -1,6 +1,6 @@
-### MULTI GPU based Cloud Optical Thickness (COT) Retrievals.
+# MULTI GPU based Cloud Optical Thickness (COT) Retrievals.
 
-# Guide to Run `script.py`
+## Guide to Run `script.py`
 
 This guide explains how to set up your AWS environment and run `script.py` for executing tasks on an EC2 instance with multiple GPUs.
 
