@@ -43,7 +43,6 @@ Once you have configured your AWS environment and gathered the required informat
 
 ### Steps to Execute
 
-1. **Navigate to the script directory**:
+**Run the script:**
 
-   ```bash
-   cd /path/to/your/script
+```python script.py```
