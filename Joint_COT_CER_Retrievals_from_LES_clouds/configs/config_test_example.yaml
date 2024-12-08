@@ -1,0 +1,13 @@
+model:
+  name: "cam"
+  pretrained: true
+data:
+  path: "test_examples/LES_profile_00579.hdf5"
+  patch_size: 64
+  stride: 4
+  fold: 4
+test:
+  checkpoint: "saved_model/cam/cam_fold_4.pth"
+
+visuals:
+  path: "/path/to/model/results"
