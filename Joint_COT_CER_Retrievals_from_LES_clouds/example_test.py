@@ -54,15 +54,25 @@ def get_inference(config):
     return data, scores
 
 def get_visuals(config,data):
-    use_log=False
-    limit1 = [0,7]
-    limit2 = [0,40]
+    dir_name = config['visuals']['path']
+    p_num    = config['visuals']['p_num']
+
+    try:
+        os.makedirs(dir_name)
+    except FileExistsError:
+        print("folder already exists")
+
+    profile = data['profile']
+    pred    = data['pred']
+
 
     #Scale back CER
     profile[1,:,:] = profile[1,:,:]*30
     pred[1,:,:]    = pred[1,:,:] *30
 
-
+    use_log=False
+    limit1 = [0,7]
+    limit2 = [0,40]
     # Plot COT
     fname = dir_name+"/full_profile_jet_cot_%01d.png"%(p_num)
     plot_cot2(cot=profile[0,:,:],title="COT",fname=fname,use_log=use_log,limit=limit1)

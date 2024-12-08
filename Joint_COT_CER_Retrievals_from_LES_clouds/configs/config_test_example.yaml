@@ -10,4 +10,5 @@ test:
   checkpoint: "saved_model/cam/cam_fold_4.pth"
 
 visuals:
-  path: "/path/to/model/results"
+  path: "visuals/LES_profile_00579"
+  p_num: 579

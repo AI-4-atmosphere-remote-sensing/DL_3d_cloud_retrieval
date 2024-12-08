@@ -152,13 +152,7 @@ def plot_cot(cot,title,fname,use_log,limit):
     plt.close()
 
 def plot_cot2(cot,title,fname,use_log,limit):
-        # Calculate aspect ratio based on data shape
-    aspect_ratio = cot.shape[1] / cot.shape[0]
-
-    # Set figure size based on desired width and aspect ratio
-    fig_width = 8  # Adjust this value as needed
-    fig_height = fig_width / aspect_ratio
-    fig, axs = plt.subplots(1, 1, figsize=(fig_width, fig_height))  # Set figsize here
+    fig, axs = plt.subplots(1, 1)  # Set figsize here
    
     # fig,axs = plt.subplots(1,1)
     Z = cot
@@ -167,7 +161,7 @@ def plot_cot2(cot,title,fname,use_log,limit):
     else:
         pcm = axs.pcolor(Z, cmap='jet', shading='auto')
         pcm.set_clim(limit[0],limit[1])
-    # axs.set_title(title, fontsize=17)
+    axs.set_title(title, fontsize=17)
     axs.tick_params(axis='both', which='major', labelsize=17)
     axs.axes.yaxis.set_visible(True)
     axs.axes.xaxis.set_visible(True)
