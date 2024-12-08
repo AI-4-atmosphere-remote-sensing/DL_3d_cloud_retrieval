@@ -56,7 +56,7 @@ def get_mean_std(fold):
     return mean1, std1
 
 
-def get_profile_pred(model,model_name,X_test,Y_test,patch_size,stride):
+def get_profile_pred(model,model_name,X_test,Y_test,patch_size,stride,fold):
     # stride = 2
     img_width = X_test.shape[1]
     img_height = X_test.shape[0]
@@ -206,7 +206,7 @@ def run_test(out,stride=4):
                 hf.close()
 
                 profile, pred, output_scores = get_profile_pred(model=model,model_name=model_name,
-                X_test=X_test,Y_test=Y_test,patch_size=patch_size,stride=stride)
+                X_test=X_test,Y_test=Y_test,patch_size=patch_size,stride=stride,fold=i)
 
 
                 ##################### Multiply by 30 ##################################
