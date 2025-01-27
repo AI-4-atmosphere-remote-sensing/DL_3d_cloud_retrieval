@@ -262,8 +262,10 @@ def test_model(model, test_loader,params,device,log_level=None):
             # Y_test = torch.unsqueeze(Y_test,0)
 
             # Move tensor to the proper device
-            X_test = X_test.to(device,dtype=torch.float)
-            Y_test = Y_test.to(device,dtype=torch.float)
+            # X_test = X_test.to(device,dtype=torch.float)
+            # Y_test = Y_test.to(device,dtype=torch.float)
+            X_test = X_test.to(dtype=torch.float)
+            Y_test = Y_test.to(dtype=torch.float)
             # forward pass: compute predicted outputs by passing inputs to the model
             output = model(X_test)
             # print(Y_test.shape)
@@ -320,8 +322,12 @@ def test_model2(model, test_loader,device,p_batch_size = 20,log_level=None):
             # Y_test = torch.unsqueeze(Y_test,0)
 
             # Move tensor to the proper device
-            X_test = X_test.to(device,dtype=torch.float)
-            Y_test = Y_test.to(device,dtype=torch.float)
+            # X_test = X_test.to(device,dtype=torch.float)
+            # Y_test = Y_test.to(device,dtype=torch.float)
+
+            X_test = X_test.to(dtype=torch.float)
+            Y_test = Y_test.to(dtype=torch.float)
+            
             # forward pass: compute predicted outputs by passing inputs to the model
             output = model(X_test)
             # print(output.shape)
