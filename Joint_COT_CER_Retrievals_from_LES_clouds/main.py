@@ -17,6 +17,7 @@ import os
 from torchinfo import summary
 import time
 import torch
+import torch.nn as nn
 from torch.utils.data import random_split, DataLoader
 import numpy as np
 import matplotlib.pyplot as plt
@@ -126,7 +127,12 @@ def main():
         valid_loader = DataLoader(valid_data, batch_size=batch_size,shuffle=False)
         test_loader = DataLoader(test_data, batch_size=batch_size,shuffle=False)
 
+        # Use DataParallel to utilize multiple GPUs
+        model = nn.DataParallel(model)
 
+        # Move the model to GPU
+        model = model.to(device)
+        
         # Create a directory to save the model and other relevant information
         saved_model_dir =os.path.join('v71_saved_model',model_name)
         try:
