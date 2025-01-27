@@ -80,9 +80,14 @@ def main():
     # dataset dir
     dataset_dir1 = "one_thousand_profiles/Refl"
     dataset_dir2 = "ncer_fill3"
-    cv_train_list = np.load("Data_split/train_split_100m.npy")
-    cv_valid_list = np.load("Data_split/valid_split_100m.npy")
-    cv_test_list = np.load("Data_split/test_split_100m.npy")
+    # cv_train_list = np.load("Data_split/train_split_100m.npy")
+    # cv_valid_list = np.load("Data_split/valid_split_100m.npy")
+    # cv_test_list = np.load("Data_split/test_split_100m.npy")
+
+    ## modify above 3 lines for aws test
+    cv_train_list = np.arange(1,31)
+    cv_valid_list = np.arange(31,41)
+    cv_test_list = np.arange(41,51)
 
     for fold in range(5):
         cp=False
