@@ -116,7 +116,7 @@ def train_model(model, train_loader, valid_loader, params, device,log_level):
         ###################
         # train the model #
         ###################
-        model.to(device)
+        # model.to(device)
         model.train() # prep model for training
         for _, data in enumerate(train_loader, 1):
         # for i in range(len(train_loader.dataset)):
@@ -138,10 +138,8 @@ def train_model(model, train_loader, valid_loader, params, device,log_level):
             
                 # Y_train = torch.unsqueeze(Y_train,1)
                 # Move tensor to the proper device
-                # X_train = X_train.to(device,dtype=torch.float)
-                # Y_train = Y_train.to(device,dtype=torch.float)
-                X_train = X_train.to(dtype=torch.float)
-                Y_train = Y_train.to(dtype=torch.float)
+                X_train = X_train.to(device,dtype=torch.float)
+                Y_train = Y_train.to(device,dtype=torch.float)
 
                 # clear the gradients of all optimized variables
                 optimizer.zero_grad()
@@ -213,7 +211,7 @@ def test_model(model, test_loader,params,device,log_level=None):
     # initialize lists to monitor test loss and accuracy
     test_losses = []
 
-    model.to(device)
+    # model.to(device)
     model.eval() # prep model for evaluation
     ### Define the loss function
     if params['loss']=="MSE":
@@ -262,10 +260,10 @@ def test_model(model, test_loader,params,device,log_level=None):
             # Y_test = torch.unsqueeze(Y_test,0)
 
             # Move tensor to the proper device
-            # X_test = X_test.to(device,dtype=torch.float)
-            # Y_test = Y_test.to(device,dtype=torch.float)
-            X_test = X_test.to(dtype=torch.float)
-            Y_test = Y_test.to(dtype=torch.float)
+            X_test = X_test.to(device,dtype=torch.float)
+            Y_test = Y_test.to(device,dtype=torch.float)
+            # X_test = X_test.to(dtype=torch.float)
+            # Y_test = Y_test.to(dtype=torch.float)
             # forward pass: compute predicted outputs by passing inputs to the model
             output = model(X_test)
             # print(Y_test.shape)
@@ -297,7 +295,7 @@ def test_model2(model, test_loader,device,p_batch_size = 20,log_level=None):
     test_cer = []
 
     criterion =torch.nn.MSELoss()
-    model.to(device)
+    # model.to(device)
     model.eval() # prep model for evaluation
     ### Define the loss function
     # X_train = torch.rand((1,2,10,10),dtype=torch.float)
@@ -322,11 +320,11 @@ def test_model2(model, test_loader,device,p_batch_size = 20,log_level=None):
             # Y_test = torch.unsqueeze(Y_test,0)
 
             # Move tensor to the proper device
-            # X_test = X_test.to(device,dtype=torch.float)
-            # Y_test = Y_test.to(device,dtype=torch.float)
+            X_test = X_test.to(device,dtype=torch.float)
+            Y_test = Y_test.to(device,dtype=torch.float)
 
-            X_test = X_test.to(dtype=torch.float)
-            Y_test = Y_test.to(dtype=torch.float)
+            # X_test = X_test.to(dtype=torch.float)
+            # Y_test = Y_test.to(dtype=torch.float)
             
             # forward pass: compute predicted outputs by passing inputs to the model
             output = model(X_test)
