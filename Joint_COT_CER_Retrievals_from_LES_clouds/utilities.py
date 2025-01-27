@@ -138,8 +138,10 @@ def train_model(model, train_loader, valid_loader, params, device,log_level):
             
                 # Y_train = torch.unsqueeze(Y_train,1)
                 # Move tensor to the proper device
-                X_train = X_train.to(device,dtype=torch.float)
-                Y_train = Y_train.to(device,dtype=torch.float)
+                # X_train = X_train.to(device,dtype=torch.float)
+                # Y_train = Y_train.to(device,dtype=torch.float)
+                X_train = X_train.to(dtype=torch.float)
+                Y_train = Y_train.to(dtype=torch.float)
 
                 # clear the gradients of all optimized variables
                 optimizer.zero_grad()
