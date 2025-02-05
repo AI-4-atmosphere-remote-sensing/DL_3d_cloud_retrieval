@@ -1,0 +1,223 @@
+2025-02-02 19:38:26,746 - cloud_retrieval - INFO - Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.12.6 | packaged by conda-forge | (main, Sep 22 2024, 14:16:49) [GCC 13.3.0]
+CUDA available: True
+GPU 0,1,2: Tesla T4
+CUDA_HOME: /usr/local/cuda
+NVCC: Cuda compilation tools, release 12.1, V12.1.105
+GCC: gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-17)
+PyTorch: 2.4.1
+PyTorch compiling details: PyTorch built with:
+  - GCC 9.3
+  - C++ Version: 201703
+  - Intel(R) oneAPI Math Kernel Library Version 2022.1-Product Build 20220311 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.4.2 (Git Hash 1137e04ec0b5251ca2b4400a4fd3c667ce843d67)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX512
+  - CUDA Runtime 12.4
+  - NVCC architecture flags: -gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90
+  - CuDNN 90.1
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=12.4, CUDNN_VERSION=9.1.0, CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/c++, CXX_FLAGS= -D_GLIBCXX_USE_CXX11_ABI=0 -fabi-version=11 -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=pedantic -Wno-error=old-style-cast -Wno-missing-braces -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=2.4.1, USE_CUDA=ON, USE_CUDNN=ON, USE_CUSPARSELT=1, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, 
+
+TorchVision: 0.19.1
+OpenCV: 4.10.0
+MMCV: 1.6.2
+MMCV Compiler: n/a
+MMCV CUDA Compiler: n/a
+------------------------------------------------------------
+
+2025-02-02 19:38:27,824 - cloud_retrieval - INFO - ====================================================================================================
+Layer (type:depth-idx)                             Output Shape              Param #
+====================================================================================================
+DataParallel                                       [128, 2, 20, 20]          --
+├─CAM: 1-1                                         [43, 2, 20, 20]           468,192
+├─CAM: 1-6                                         --                        (recursive)
+│    └─DoubleConv: 2-1                             [43, 32, 20, 20]          9,920
+│    └─DoubleConv: 2-11                            --                        (recursive)
+│    │    └─Sequential: 3-1                        [43, 32, 20, 20]          9,920
+│    │    └─Sequential: 3-9                        --                        (recursive)
+├─CAM: 1-3                                         [43, 2, 20, 20]           --
+├─CAM: 1-6                                         --                        (recursive)
+│    └─DoubleConv: 2-3                             [43, 32, 20, 20]          --
+│    └─DoubleConv: 2-11                            --                        (recursive)
+│    │    └─Sequential: 3-3                        [43, 32, 20, 20]          --
+│    │    └─Sequential: 3-9                        --                        (recursive)
+├─CAM: 1-5                                         [42, 2, 20, 20]           --
+├─CAM: 1-6                                         --                        (recursive)
+│    └─DoubleConv: 2-5                             [42, 32, 20, 20]          --
+│    └─DoubleConv: 2-11                            --                        (recursive)
+│    │    └─Sequential: 3-5                        [42, 32, 20, 20]          --
+│    │    └─Sequential: 3-9                        --                        (recursive)
+│    └─CBAM: 2-7                                   [43, 32, 20, 20]          --
+│    └─CBAM: 2-13                                  --                        (recursive)
+│    │    └─ChannelGate: 3-7                       [43, 32, 20, 20]          --
+│    └─CBAM: 2-9                                   [42, 32, 20, 20]          --
+│    └─CBAM: 2-13                                  --                        (recursive)
+│    │    └─ChannelGate: 3-8                       [42, 32, 20, 20]          --
+│    └─DoubleConv: 2-11                            --                        (recursive)
+│    │    └─Sequential: 3-9                        --                        (recursive)
+│    └─CBAM: 2-12                                  [43, 32, 20, 20]          162
+│    └─CBAM: 2-13                                  --                        (recursive)
+│    │    └─ChannelGate: 3-10                      [43, 32, 20, 20]          162
+│    │    └─ChannelGate: 3-11                      --                        162
+│    └─Down: 2-14                                  [42, 64, 10, 10]          --
+│    └─Down: 2-19                                  --                        (recursive)
+│    │    └─Sequential: 3-12                       [42, 64, 10, 10]          --
+│    │    └─Sequential: 3-17                       --                        (recursive)
+│    └─Down: 2-16                                  [43, 64, 10, 10]          --
+│    └─Down: 2-19                                  --                        (recursive)
+│    │    └─Sequential: 3-14                       [43, 64, 10, 10]          --
+│    │    └─Sequential: 3-17                       --                        (recursive)
+│    └─Down: 2-18                                  [43, 64, 10, 10]          55,552
+│    └─Down: 2-19                                  --                        (recursive)
+│    │    └─Sequential: 3-16                       [43, 64, 10, 10]          55,552
+│    │    └─Sequential: 3-17                       --                        (recursive)
+│    └─CBAM: 2-20                                  [42, 64, 10, 10]          --
+│    └─CBAM: 2-25                                  --                        (recursive)
+│    │    └─ChannelGate: 3-18                      [42, 64, 10, 10]          --
+│    └─CBAM: 2-22                                  [43, 64, 10, 10]          --
+│    └─CBAM: 2-25                                  --                        (recursive)
+│    │    └─ChannelGate: 3-19                      [43, 64, 10, 10]          --
+│    │    └─ChannelGate: 3-22                      --                        (recursive)
+│    └─CBAM: 2-24                                  [43, 64, 10, 10]          580
+│    └─CBAM: 2-25                                  --                        (recursive)
+│    │    └─ChannelGate: 3-21                      [43, 64, 10, 10]          580
+│    │    └─ChannelGate: 3-22                      --                        (recursive)
+│    └─Down: 2-26                                  [42, 128, 5, 5]           --
+│    └─Down: 2-34                                  --                        (recursive)
+│    │    └─Sequential: 3-23                       [42, 128, 5, 5]           --
+│    │    └─Sequential: 3-30                       --                        (recursive)
+│    └─Down: 2-28                                  [43, 128, 5, 5]           221,696
+│    └─Down: 2-34                                  --                        (recursive)
+│    │    └─Sequential: 3-25                       [43, 128, 5, 5]           221,696
+│    │    └─Sequential: 3-30                       --                        (recursive)
+│    └─Down: 2-30                                  [43, 128, 5, 5]           --
+│    └─Down: 2-34                                  --                        (recursive)
+│    │    └─Sequential: 3-27                       [43, 128, 5, 5]           --
+│    │    └─Sequential: 3-30                       --                        (recursive)
+│    └─Up: 2-32                                    [42, 64, 10, 10]          --
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─ConvTranspose2d: 3-29                  [42, 64, 10, 10]          --
+│    └─Down: 2-34                                  --                        (recursive)
+│    │    └─Sequential: 3-30                       --                        (recursive)
+│    └─Up: 2-35                                    [43, 64, 10, 10]          143,680
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─ConvTranspose2d: 3-31                  [43, 64, 10, 10]          32,832
+│    └─Up: 2-37                                    [43, 64, 10, 10]          --
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─ConvTranspose2d: 3-32                  [43, 64, 10, 10]          --
+│    │    └─Dropout: 3-33                          [43, 64, 10, 10]          --
+│    │    └─Dropout: 3-34                          [42, 64, 10, 10]          --
+│    │    └─Dropout: 3-35                          [43, 64, 10, 10]          --
+│    │    └─DoubleConv: 3-36                       [43, 64, 10, 10]          110,848
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-39                                    [43, 32, 20, 20]          36,000
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─ConvTranspose2d: 3-38                  [43, 32, 20, 20]          8,224
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-39                       [42, 64, 10, 10]          --
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─Dropout: 3-41                          [43, 32, 20, 20]          --
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-42                       [43, 64, 10, 10]          --
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─DoubleConv: 3-44                       [43, 32, 20, 20]          27,776
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    └─DoubleConv: 2-51                            [43, 1, 20, 20]           301
+│    └─DoubleConv: 2-67                            --                        (recursive)
+│    │    └─Sequential: 3-52                       [43, 1, 20, 20]           301
+│    │    └─Sequential: 3-71                       --                        (recursive)
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-54                                    [42, 32, 20, 20]          --
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─ConvTranspose2d: 3-55                  [42, 32, 20, 20]          --
+│    └─Up: 2-56                                    --                        (recursive)
+│    │    └─DoubleConv: 3-56                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─Dropout: 3-57                          [42, 32, 20, 20]          --
+│    └─Up: 2-58                                    [43, 32, 20, 20]          --
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─ConvTranspose2d: 3-58                  [43, 32, 20, 20]          --
+│    │    └─DoubleConv: 3-59                       [42, 32, 20, 20]          --
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    │    └─Dropout: 3-61                          [43, 32, 20, 20]          --
+│    │    └─DoubleConv: 3-62                       [43, 32, 20, 20]          --
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    └─DoubleConv: 2-60                            [42, 1, 20, 20]           --
+│    └─DoubleConv: 2-67                            --                        (recursive)
+│    │    └─Sequential: 3-64                       [42, 1, 20, 20]           --
+│    │    └─Sequential: 3-71                       --                        (recursive)
+│    └─Up: 2-62                                    --                        (recursive)
+│    │    └─DoubleConv: 3-66                       --                        (recursive)
+│    └─DoubleConv: 2-63                            [43, 1, 20, 20]           --
+│    └─DoubleConv: 2-67                            --                        (recursive)
+│    │    └─Sequential: 3-67                       [43, 1, 20, 20]           --
+│    │    └─Sequential: 3-71                       --                        (recursive)
+│    └─DoubleConv: 2-65                            [42, 1, 20, 20]           --
+│    └─DoubleConv: 2-71                            --                        (recursive)
+│    │    └─Sequential: 3-69                       [42, 1, 20, 20]           --
+│    │    └─Sequential: 3-75                       --                        (recursive)
+│    └─DoubleConv: 2-67                            --                        (recursive)
+│    │    └─Sequential: 3-71                       --                        (recursive)
+│    └─DoubleConv: 2-68                            [43, 1, 20, 20]           301
+│    └─DoubleConv: 2-71                            --                        (recursive)
+│    │    └─Sequential: 3-72                       [43, 1, 20, 20]           301
+│    │    └─Sequential: 3-75                       --                        (recursive)
+│    └─DoubleConv: 2-70                            [43, 1, 20, 20]           --
+│    └─DoubleConv: 2-71                            --                        (recursive)
+│    │    └─Sequential: 3-74                       [43, 1, 20, 20]           --
+│    │    └─Sequential: 3-75                       --                        (recursive)
+====================================================================================================
+Total params: 2,525,574
+Trainable params: 2,525,574
+Non-trainable params: 0
+Total mult-adds (Units.GIGABYTES): 1.89
+====================================================================================================
+Input size (MB): 0.41
+Forward/backward pass size (MB): 65.02
+Params size (MB): 1.87
+Estimated Total Size (MB): 67.30
+====================================================================================================
+2025-02-02 19:38:27,826 - cloud_retrieval - INFO - Predicts cot,CER from r1 and r2 
+2025-02-02 19:38:27,826 - cloud_retrieval - INFO - Parameters info:
+------------------------------------------------------------
+saved_model_path: v71_saved_model/cam/cam_fold_0_20250202_193826.pth
+batch: 1024
+optimizer: SGD
+lr: 0.01
+loss: MSE
+scheduler: None
+num_epochs: 2
+patience: 1
+w1: 1.0
+w2: 1.0
+p_batch_size: 128
+patch_size: 20
+------------------------------------------------------------
+
+2025-02-02 19:38:34,616 - cloud_retrieval - INFO - [1/2] train_loss: 0.61269 valid_loss: 0.41671 lr: 0.01  
+2025-02-02 19:38:41,318 - cloud_retrieval - INFO - [2/2] train_loss: 0.58652 valid_loss: 0.40699 lr: 0.01  
+2025-02-02 19:38:43,783 - cloud_retrieval - INFO - Time: 20.93
+2025-02-02 19:38:43,783 - cloud_retrieval - INFO -   Train Loss:  0.4167
+  Valid loss:  0.417
+  Test COT MSE: 1.0202
+   Test CER MSE: 0.0118 
