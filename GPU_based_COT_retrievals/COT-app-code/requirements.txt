@@ -1,5 +1,0 @@
-torchinfo
-matplotlib
-mmcv-full
-scikit-learn
-h5py
