@@ -68,7 +68,7 @@ This script provides end-to-end automation for machine learning tasks on AWS:
      ```
 5. **Resource Cleanup**: Automatically terminates the EC2 instance when processing completes
 
-# Benefits
+### Benefits
 
 - **Cost Efficiency**: Automatically terminates instances after completion, preventing wasted resources
 - **Reproducibility**: Consistent environment through AMI and parameterized execution
@@ -76,7 +76,7 @@ This script provides end-to-end automation for machine learning tasks on AWS:
 - **Flexibility**: Configurable machine learning parameters
 - **Persistence**: Results safely stored in S3 even after instance termination
 
-## To Test, you can follow the following procedure: 
+# To Test, you can follow the following procedure: 
 
 # Deep Learning for 3D Cloud Retrievals from LES cloud scences
 In this GitHub repositary, you will find information on how to preprocess the raw data, how to install required packages, all the deep learning models, how to train and test the models, and how to evaluate the test results quantitively and through visualization.
