@@ -8,8 +8,8 @@ import boto3
 import paramiko
 import time
 from datetime import datetime
-import os
-import argparse  # Added this import
+import os, argparse  # Added this import
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Run ML model on EC2')
@@ -99,7 +99,7 @@ def main():
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         
-        max_attempts = 20
+        max_attempts = 10
         connected = False
         username = 'ec2-user'  # Try ec2-user first
         
@@ -249,24 +249,21 @@ def main():
         # 9. Save output to S3
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_dir = f"result_{os.path.basename(working_dir)}_{timestamp}"
-        log_print(f"Saving output to S3 bucket: {args.s3_bucket}/{output_dir}/")
+        print(f"Saving output to S3 bucket: {args.s3_bucket}/{output_dir}/")
         
         # Create temp directory for logs
         stdin, stdout, stderr = ssh.exec_command(f"mkdir -p /tmp/{output_dir}")
         stdout.channel.recv_exit_status()
         
-        # Write log.txt with complete terminal output
+        # Write log.txt
         echo_cmd = f"cat > /tmp/{output_dir}/log.txt"
         stdin, stdout, stderr = ssh.exec_command(echo_cmd)
-        stdin.write(complete_log + all_output)  # Complete log + ML output
+        stdin.write(all_output)
         stdin.channel.shutdown_write()
         stdout.channel.recv_exit_status()
         
-        # Write out.txt with just ML output
-        echo_cmd = f"cat > /tmp/{output_dir}/out.txt"
-        stdin, stdout, stderr = ssh.exec_command(echo_cmd)
-        stdin.write(all_output)  # Just ML output
-        stdin.channel.shutdown_write()
+        # Write out.txt (same as log.txt for now)
+        stdin, stdout, stderr = ssh.exec_command(f"cp /tmp/{output_dir}/log.txt /tmp/{output_dir}/out.txt")
         stdout.channel.recv_exit_status()
         
         # Upload to S3
@@ -276,18 +273,14 @@ def main():
         
         if exit_status == 0:
             print(f"Logs uploaded to s3://{args.s3_bucket}/{output_dir}/")
-            complete_log += f"Logs uploaded to s3://{args.s3_bucket}/{output_dir}/\n"
         else:
             error = stderr.read().decode('utf-8', errors='replace')
             print(f"Error uploading logs: {error}")
-            complete_log += f"Error uploading logs: {error}\n"
         
         # 10. Terminate instance
         print(f"Terminating instance {instance_id}...")
         ec2.terminate_instances(InstanceIds=[instance_id])
         print("Instance termination request sent")
-        complete_log += f"Terminating instance {instance_id}...\n"
-        complete_log += "Instance termination request sent\n"
             
     except Exception as e:
         print(f"Error: {str(e)}")
