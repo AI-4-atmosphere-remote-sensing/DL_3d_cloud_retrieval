@@ -9,18 +9,42 @@ import paramiko
 import time
 from datetime import datetime
 import os
-import argparse
+import argparse  # Added this import
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Run ML model on EC2')
-    parser.add_argument('--batch_size', type=int, default=1024, help='Batch size for the model')
-    parser.add_argument('--epochs', type=int, default=1, help='Number of epochs')
-    parser.add_argument('--num_of_gpu', type=int, default=3, help='Number of GPUs to use')
-    parser.add_argument('--model_name', type=str, default='cam', help='Model name')
-    parser.add_argument('--func', type=str, default='MSE', help='Loss function')
+    # EC2 and AWS configuration
     parser.add_argument('--key_path', type=str, required=True, 
                         help='Path to EC2 key file (.pem)')
+    parser.add_argument('--s3_bucket', type=str, required=True,
+                        help='S3 bucket name for storing results')
+    
+    # File paths
+    parser.add_argument('--code_zip', type=str, required=True,
+                        help='Path to zip file containing code')
+    parser.add_argument('--data_zip', type=str, required=True,
+                        help='Path to zip file containing data')
+    
+    # ML parameters
+    parser.add_argument('--batch_size', type=int, default=1024)
+    parser.add_argument('--epochs', type=int, default=1)
+    parser.add_argument('--num_of_gpu', type=int, default=3)
+    parser.add_argument('--model_name', type=str, default='cam')
+    parser.add_argument('--func', type=str, default='MSE')
     return parser.parse_args()
+
+def run_command(ssh, command, print_output=True):
+    """Helper function to run commands and handle output"""
+    stdin, stdout, stderr = ssh.exec_command(command)
+    exit_status = stdout.channel.recv_exit_status()
+    if print_output:
+        output = stdout.read().decode('utf-8', errors='replace')
+        error = stderr.read().decode('utf-8', errors='replace')
+        if output:
+            print(output)
+        if error:
+            print(f"Error: {error}")
+    return exit_status
 
 def main():
     # Parse command line arguments
@@ -31,18 +55,18 @@ def main():
     key_name = os.path.splitext(os.path.basename(key_file_path))[0]
     
     # Configuration
-    ami_id = 'ami-0e06313fd578be579'
+    ami_id = 'ami-0339ea6f7f5408bb9'
     instance_type = 'g4dn.12xlarge'
     security_group_ids = ['sg-02524143560b47240']
-    bucket_name = 'seraj-automl-storage'
     region = 'us-west-2'
     
     print(f"Using key: {key_name} (from {key_file_path})")
-    
-    # Initialize EC2 client
-    ec2 = boto3.client('ec2', region_name=region)
+    print(f"Using S3 bucket: {args.s3_bucket}")
     
     try:
+        # Initialize EC2 client
+        ec2 = boto3.client('ec2', region_name=region)
+        
         # 1. Launch instance
         print(f"Launching instance from AMI {ami_id}...")
         response = ec2.run_instances(
@@ -60,51 +84,59 @@ def main():
         waiter = ec2.get_waiter('instance_running')
         waiter.wait(InstanceIds=[instance_id])
         
-        # 3. Get instance IP
+        # 3. Get instance IP and DNS
         response = ec2.describe_instances(InstanceIds=[instance_id])
-        public_ip = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-        print(f"Instance running at {public_ip}")
+        instance_info = response['Reservations'][0]['Instances'][0]
+        public_ip = instance_info['PublicIpAddress']
+        public_dns = instance_info['PublicDnsName']
+        print(f"Instance running at:")
+        print(f"IP: {public_ip}")
+        print(f"DNS: {public_dns}")
+        print(f"SSH command: ssh -i {key_file_path} ec2-user@{public_dns}")
         
         # 4. Wait for SSH to be available
-        print("Waiting for SSH to be available...")
+        print("\nWaiting for SSH to be available...")
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         
         max_attempts = 20
         connected = False
+        username = 'ec2-user'  # Try ec2-user first
         
-        # Only try to connect as ec2-user
+        # Try to connect using DNS name
         for attempt in range(max_attempts):
             try:
                 ssh.connect(
-                    public_ip,
-                    username='ec2-user',
+                    public_dns,  # Use DNS instead of IP
+                    username=username,
                     key_filename=key_file_path,
                     timeout=10
                 )
-                print("Connected as ec2-user")
+                print(f"Connected as {username} to {public_dns}")
                 connected = True
                 break
             except Exception as e:
                 print(f"Attempt {attempt+1} failed: {str(e)}")
+                if username == 'ec2-user' and attempt == 2:
+                    print("Trying ubuntu user instead...")
+                    username = 'ubuntu'
                 time.sleep(5)
                 
-        # 4a. Configure AWS credentials after connecting
+        if not connected:
+            raise Exception("Failed to connect after multiple attempts")
+
+        # 5. Configure AWS credentials
         print("Configuring AWS credentials...")
         session = boto3.Session()
         credentials = session.get_credentials()
-        region_name = session.region_name or region
         
         if credentials:
-            # Create directory and files
             stdin, stdout, stderr = ssh.exec_command("mkdir -p ~/.aws")
             stdout.channel.recv_exit_status()
             
-            # Create credentials file
             cred_file_content = "[default]\n"
             cred_file_content += f"aws_access_key_id = {credentials.access_key}\n"
             cred_file_content += f"aws_secret_access_key = {credentials.secret_key}\n"
-            
             if credentials.token:
                 cred_file_content += f"aws_session_token = {credentials.token}\n"
                 
@@ -113,52 +145,58 @@ def main():
             stdin.channel.shutdown_write()
             stdout.channel.recv_exit_status()
             
-            # Create config file with region
             config_content = "[default]\n"
-            config_content += f"region = {region_name}\n"
+            config_content += f"region = {region}\n"
             
             stdin, stdout, stderr = ssh.exec_command("cat > ~/.aws/config")
             stdin.write(config_content)
             stdin.channel.shutdown_write()
             stdout.channel.recv_exit_status()
+
+        # 6. Upload and extract code and data
+        print("Uploading code and data files...")
+        sftp = ssh.open_sftp()
+        
+        # Set home directory based on user
+        home_dir = f"/home/{username}"
+        
+        # Upload code
+        remote_code_zip = f"{home_dir}/code.zip"
+        sftp.put(args.code_zip, remote_code_zip)
+        
+        # Upload data
+        remote_data_zip = f"{home_dir}/data.zip"
+        sftp.put(args.data_zip, remote_data_zip)
+        
+        sftp.close()
+        
+        # Extract files
+        print("Extracting files...")
+        run_command(ssh, f"unzip -o {remote_code_zip} -d {home_dir}/")
+        run_command(ssh, f"unzip -o {remote_data_zip} -d {home_dir}/")
+        
+        # Find main.py location
+        print("Locating main.py...")
+        stdin, stdout, stderr = ssh.exec_command(f"find {home_dir} -name 'main.py'")
+        main_py_path = stdout.read().decode('utf-8').strip()
+        if not main_py_path:
+            raise Exception("Could not find main.py in the uploaded code")
             
-            print("AWS credentials configured")
-        else:
-            print("Warning: No AWS credentials found in local session")
+        working_dir = os.path.dirname(main_py_path)
+        print(f"Found main.py in: {working_dir}")
         
-        # 5. Use the exact path we know works
-        joint_dir = "/home/ec2-user/Joint_COT_CER_Retrievals_from_LES_clouds"
-        ml_script_path = f"{joint_dir}/main2.py"
+        # 7. Install required packages
+        print("Installing required packages...")
+        run_command(ssh, "pip install torchinfo h5py scikit-image")
+        run_command(ssh, "pip install mmcv==1.6.2 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.4/index.html")
         
-        # 5a. Only fix permissions on the v71_saved_model directory
-        print("Setting permissions on the log output directory...")
-        log_dir = f"{joint_dir}/v71_saved_model/cam"
+        # Wait for installations to complete
+        print("Waiting for installations to complete...")
+        time.sleep(4)
         
-        # First create the directory with sudo if it doesn't exist
-        mkdir_cmd = f"sudo mkdir -p {log_dir}"
-        stdin, stdout, stderr = ssh.exec_command(mkdir_cmd)
-        stdout.channel.recv_exit_status()
-        
-        # Then set ownership and permissions
-        chown_cmd = f"sudo chown -R ec2-user:ec2-user {log_dir}"
-        stdin, stdout, stderr = ssh.exec_command(chown_cmd)
-        stdout.channel.recv_exit_status()
-        
-        chmod_cmd = f"sudo chmod -R 777 {log_dir}"
-        stdin, stdout, stderr = ssh.exec_command(chmod_cmd)
-        chmod_exit_status = stdout.channel.recv_exit_status()
-        
-        if chmod_exit_status != 0:
-            print(f"Warning: Could not set permissions on log directory: {stderr.read().decode('utf-8', errors='replace')}")
-        else:
-            print("Log directory permissions set successfully")
-        
-        # 6. Create output directory name
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_dir = f"Joint_COT_CER_Retrievals_from_LES_clouds_{timestamp}"
-        
-        # 7. Run the ML model with arguments
-        ml_cmd = f"cd {joint_dir} && python main2.py"
+        # 8. Run the ML model
+        print("Running ML model...")
+        ml_cmd = f"cd {working_dir} && python main.py"
         
         # Add command line arguments
         if args.batch_size is not None:
@@ -171,14 +209,13 @@ def main():
             ml_cmd += f" --model_name {args.model_name}"
         if args.func is not None:
             ml_cmd += f" --func {args.func}"
-        
-        print(f"Running ML model: {ml_cmd}")
+            
+        print(f"Running command: {ml_cmd}")
         print("=" * 80)
         
-        # Execute command
+        # Execute command and stream output
         stdin, stdout, stderr = ssh.exec_command(ml_cmd)
         
-        # Stream output in real-time
         all_output = ""
         while not stdout.channel.exit_status_ready():
             if stdout.channel.recv_ready():
@@ -190,7 +227,6 @@ def main():
                     print(f"Error reading output: {str(e)}")
             time.sleep(0.1)
             
-        # Get any remaining output
         try:
             remaining = stdout.read().decode('utf-8', errors='replace')
             if remaining:
@@ -199,7 +235,6 @@ def main():
         except Exception as e:
             print(f"Error reading remaining output: {str(e)}")
             
-        # Get any errors
         try:
             err = stderr.read().decode('utf-8', errors='replace')
             if err:
@@ -211,66 +246,48 @@ def main():
         print("=" * 80)
         print("ML model execution completed")
         
-        # 8. Save output to files
-        # Get parent folder name
-        parent_folder = os.path.basename(joint_dir)
+        # 9. Save output to S3
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_dir = f"result_{parent_folder}_{timestamp}"
-        
-        print(f"Saving output to S3 bucket: {bucket_name}/{output_dir}/")
+        output_dir = f"result_{os.path.basename(working_dir)}_{timestamp}"
+        log_print(f"Saving output to S3 bucket: {args.s3_bucket}/{output_dir}/")
         
         # Create temp directory for logs
         stdin, stdout, stderr = ssh.exec_command(f"mkdir -p /tmp/{output_dir}")
         stdout.channel.recv_exit_status()
         
-        # Save all terminal output to log.txt
+        # Write log.txt with complete terminal output
         echo_cmd = f"cat > /tmp/{output_dir}/log.txt"
         stdin, stdout, stderr = ssh.exec_command(echo_cmd)
-        stdin.write(all_output)
+        stdin.write(complete_log + all_output)  # Complete log + ML output
         stdin.channel.shutdown_write()
         stdout.channel.recv_exit_status()
         
-        # Extract ML output only for out.txt (lines related to model training/evaluation)
-        ml_output = ""
-        for line in all_output.split('\n'):
-            if any(keyword in line for keyword in ['Epoch', 'Train:', 'Test:', 'loss', 'accuracy', 
-                                                  'Running on', 'Loading', 'Batch', 'folder', 
-                                                  'tensor', 'model', 'GPU']):
-                ml_output += line + '\n'
-        
-        # Save ML output to out.txt
+        # Write out.txt with just ML output
         echo_cmd = f"cat > /tmp/{output_dir}/out.txt"
         stdin, stdout, stderr = ssh.exec_command(echo_cmd)
-        stdin.write(ml_output)
+        stdin.write(all_output)  # Just ML output
         stdin.channel.shutdown_write()
         stdout.channel.recv_exit_status()
         
-        # 9. Upload to S3
-        s3_upload_cmd = f"aws s3 cp /tmp/{output_dir} s3://{bucket_name}/{output_dir} --recursive"
+        # Upload to S3
+        s3_upload_cmd = f"aws s3 cp /tmp/{output_dir} s3://{args.s3_bucket}/{output_dir} --recursive"
         stdin, stdout, stderr = ssh.exec_command(s3_upload_cmd)
         exit_status = stdout.channel.recv_exit_status()
         
         if exit_status == 0:
-            print(f"Logs uploaded to s3://{bucket_name}/{output_dir}/")
+            print(f"Logs uploaded to s3://{args.s3_bucket}/{output_dir}/")
+            complete_log += f"Logs uploaded to s3://{args.s3_bucket}/{output_dir}/\n"
         else:
             error = stderr.read().decode('utf-8', errors='replace')
             print(f"Error uploading logs: {error}")
-            
-            # Check AWS CLI installation and configuration
-            stdin, stdout, stderr = ssh.exec_command("which aws && aws --version && aws configure list")
-            aws_info = stdout.read().decode('utf-8', errors='replace')
-            print(f"AWS CLI info:\n{aws_info}")
-            
-            # Try alternative upload method
-            print("Attempting alternative upload method...")
-            stdin, stdout, stderr = ssh.exec_command(f"sudo yum install -y awscli && aws s3 cp /tmp/{output_dir} s3://{bucket_name}/{output_dir} --recursive")
-            alt_result = stdout.read().decode('utf-8', errors='replace')
-            print(f"Alternative upload result: {alt_result}")
+            complete_log += f"Error uploading logs: {error}\n"
         
-        # 10. Automatically terminate the instance
+        # 10. Terminate instance
         print(f"Terminating instance {instance_id}...")
         ec2.terminate_instances(InstanceIds=[instance_id])
         print("Instance termination request sent")
+        complete_log += f"Terminating instance {instance_id}...\n"
+        complete_log += "Instance termination request sent\n"
             
     except Exception as e:
         print(f"Error: {str(e)}")
