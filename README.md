@@ -1,5 +1,3 @@
-I'll update the documentation to be more comprehensive:
-
 # AWS ML Model Automation Script
 This guide explains how to automate running ML models on AWS EC2 instances. The script automates launching an EC2 instance, executing ML code, and storing results in S3.
 
@@ -86,7 +84,7 @@ python3 ec2_runner.py \
 - `--model_name`: Model name (default: cam)
 - `--func`: Loss function (default: MSE)
 
-## Workflow
+## Workflow (how the script works)
 
 ### 1. Instance Launch
 - Launches g4dn.12xlarge instance with GPU support
