@@ -1,5 +1,5 @@
 # AWS ML Model Automation Script
-This guide explains how to automate running ML models on AWS EC2 instances. The script automates launching an EC2 instance, executing ML code, and storing results in S3.
+This guide explains how to automate running the ``Joint COT CER cloud retrieval``` ML model on AWS EC2 instances using multi GPU. The ```aws-automation-joint_cot_cer.py``` script automates launching an EC2 instance, executing ML code, and storing results in S3 and locally, and finally terminating EC2 instance.
 
 ## Prerequisites
 
