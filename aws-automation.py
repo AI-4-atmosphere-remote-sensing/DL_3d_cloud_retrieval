@@ -8,8 +8,8 @@ import boto3
 import paramiko
 import time
 from datetime import datetime
-import os, argparse  # Added this import
-
+import os
+import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Run ML model on EC2')
@@ -18,6 +18,8 @@ def parse_args():
                         help='Path to EC2 key file (.pem)')
     parser.add_argument('--s3_bucket', type=str, required=True,
                         help='S3 bucket name for storing results')
+    parser.add_argument('--output_dir', type=str, required=True,
+                        help='Local directory path to save log files')
     
     # File paths
     parser.add_argument('--code_zip', type=str, required=True,
@@ -50,25 +52,33 @@ def main():
     # Parse command line arguments
     args = parse_args()
     
+    # Initialize terminal output capture
+    terminal_logs = []
+    
+    def log_print(message):
+        """Helper to print and store output"""
+        print(message)
+        terminal_logs.append(message)
+    
     # Get key name from key path (filename without extension)
     key_file_path = args.key_path
     key_name = os.path.splitext(os.path.basename(key_file_path))[0]
     
     # Configuration
     ami_id = 'ami-0339ea6f7f5408bb9'
-    instance_type = 'g4dn.12xlarge'
+    instance_type = 'g5.12xlarge'
     security_group_ids = ['sg-02524143560b47240']
     region = 'us-west-2'
     
-    print(f"Using key: {key_name} (from {key_file_path})")
-    print(f"Using S3 bucket: {args.s3_bucket}")
+    log_print(f"Using key: {key_name} (from {key_file_path})")
+    log_print(f"Using S3 bucket: {args.s3_bucket}")
     
     try:
         # Initialize EC2 client
         ec2 = boto3.client('ec2', region_name=region)
         
         # 1. Launch instance
-        print(f"Launching instance from AMI {ami_id}...")
+        log_print(f"Launching instance from AMI {ami_id}...")
         response = ec2.run_instances(
             ImageId=ami_id,
             InstanceType=instance_type,
@@ -80,7 +90,7 @@ def main():
         instance_id = response['Instances'][0]['InstanceId']
         
         # 2. Wait for instance to start
-        print(f"Waiting for instance {instance_id} to start...")
+        log_print(f"Waiting for instance {instance_id} to start...")
         waiter = ec2.get_waiter('instance_running')
         waiter.wait(InstanceIds=[instance_id])
         
@@ -89,17 +99,17 @@ def main():
         instance_info = response['Reservations'][0]['Instances'][0]
         public_ip = instance_info['PublicIpAddress']
         public_dns = instance_info['PublicDnsName']
-        print(f"Instance running at:")
-        print(f"IP: {public_ip}")
-        print(f"DNS: {public_dns}")
-        print(f"SSH command: ssh -i {key_file_path} ec2-user@{public_dns}")
+        log_print(f"Instance running at:")
+        log_print(f"IP: {public_ip}")
+        log_print(f"DNS: {public_dns}")
+        log_print(f"SSH command: ssh -i {key_file_path} ec2-user@{public_dns}")
         
         # 4. Wait for SSH to be available
-        print("\nWaiting for SSH to be available...")
+        log_print("\nWaiting for SSH to be available...")
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         
-        max_attempts = 10
+        max_attempts = 20
         connected = False
         username = 'ec2-user'  # Try ec2-user first
         
@@ -112,13 +122,13 @@ def main():
                     key_filename=key_file_path,
                     timeout=10
                 )
-                print(f"Connected as {username} to {public_dns}")
+                log_print(f"Connected as {username} to {public_dns}")
                 connected = True
                 break
             except Exception as e:
-                print(f"Attempt {attempt+1} failed: {str(e)}")
+                log_print(f"Attempt {attempt+1} failed: {str(e)}")
                 if username == 'ec2-user' and attempt == 2:
-                    print("Trying ubuntu user instead...")
+                    log_print("Trying ubuntu user instead...")
                     username = 'ubuntu'
                 time.sleep(5)
                 
@@ -126,7 +136,7 @@ def main():
             raise Exception("Failed to connect after multiple attempts")
 
         # 5. Configure AWS credentials
-        print("Configuring AWS credentials...")
+        log_print("Configuring AWS credentials...")
         session = boto3.Session()
         credentials = session.get_credentials()
         
@@ -154,7 +164,7 @@ def main():
             stdout.channel.recv_exit_status()
 
         # 6. Upload and extract code and data
-        print("Uploading code and data files...")
+        log_print("Uploading code and data files...")
         sftp = ssh.open_sftp()
         
         # Set home directory based on user
@@ -171,31 +181,30 @@ def main():
         sftp.close()
         
         # Extract files
-        print("Extracting files...")
+        log_print("Extracting files...")
         run_command(ssh, f"unzip -o {remote_code_zip} -d {home_dir}/")
         run_command(ssh, f"unzip -o {remote_data_zip} -d {home_dir}/")
         
         # Find main.py location
-        print("Locating main.py...")
+        log_print("Locating main.py...")
         stdin, stdout, stderr = ssh.exec_command(f"find {home_dir} -name 'main.py'")
         main_py_path = stdout.read().decode('utf-8').strip()
         if not main_py_path:
             raise Exception("Could not find main.py in the uploaded code")
             
         working_dir = os.path.dirname(main_py_path)
-        print(f"Found main.py in: {working_dir}")
+        log_print(f"Found main.py in: {working_dir}")
         
         # 7. Install required packages
-        print("Installing required packages...")
+        log_print("Installing required packages...")
         run_command(ssh, "pip install torchinfo h5py scikit-image")
         run_command(ssh, "pip install mmcv==1.6.2 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.4/index.html")
         
         # Wait for installations to complete
-        print("Waiting for installations to complete...")
+        log_print("Waiting for installations to complete...")
         time.sleep(4)
         
         # 8. Run the ML model
-        print("Running ML model...")
         ml_cmd = f"cd {working_dir} && python main.py"
         
         # Add command line arguments
@@ -210,8 +219,8 @@ def main():
         if args.func is not None:
             ml_cmd += f" --func {args.func}"
             
-        print(f"Running command: {ml_cmd}")
-        print("=" * 80)
+        log_print(f"Running ML model: {ml_cmd}")
+        log_print("=" * 80)
         
         # Execute command and stream output
         stdin, stdout, stderr = ssh.exec_command(ml_cmd)
@@ -224,7 +233,7 @@ def main():
                     print(data, end='')
                     all_output += data
                 except Exception as e:
-                    print(f"Error reading output: {str(e)}")
+                    log_print(f"Error reading output: {str(e)}")
             time.sleep(0.1)
             
         try:
@@ -233,7 +242,7 @@ def main():
                 print(remaining, end='')
                 all_output += remaining
         except Exception as e:
-            print(f"Error reading remaining output: {str(e)}")
+            log_print(f"Error reading remaining output: {str(e)}")
             
         try:
             err = stderr.read().decode('utf-8', errors='replace')
@@ -241,29 +250,46 @@ def main():
                 print(f"STDERR: {err}")
                 all_output += f"\nSTDERR: {err}"
         except Exception as e:
-            print(f"Error reading stderr: {str(e)}")
+            log_print(f"Error reading stderr: {str(e)}")
             
         print("=" * 80)
-        print("ML model execution completed")
+        log_print("Model execution completed")
         
-        # 9. Save output to S3
+        # 9. Save output locally and to S3
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_dir = f"result_{os.path.basename(working_dir)}_{timestamp}"
-        print(f"Saving output to S3 bucket: {args.s3_bucket}/{output_dir}/")
+        log_print(f"Saving output to S3 bucket: {args.s3_bucket}/{output_dir}/")
         
-        # Create temp directory for logs
+        # Create local directory
+        local_output_path = os.path.join(args.output_dir, output_dir)
+        os.makedirs(local_output_path, exist_ok=True)
+        
+        # Create full log content
+        full_log = "\n".join(terminal_logs)
+        full_log += "\n\nML Output:\n" + all_output
+        
+        # Save locally first
+        with open(os.path.join(local_output_path, 'log.txt'), 'w') as f:
+            f.write(full_log)
+        with open(os.path.join(local_output_path, 'out.txt'), 'w') as f:
+            f.write(all_output)
+        log_print(f"Logs saved locally in directory: {local_output_path}/")
+        
+        # Create temp directory for S3 upload
         stdin, stdout, stderr = ssh.exec_command(f"mkdir -p /tmp/{output_dir}")
         stdout.channel.recv_exit_status()
         
-        # Write log.txt
+        # Write files for S3 upload
         echo_cmd = f"cat > /tmp/{output_dir}/log.txt"
         stdin, stdout, stderr = ssh.exec_command(echo_cmd)
-        stdin.write(all_output)
+        stdin.write(full_log)
         stdin.channel.shutdown_write()
         stdout.channel.recv_exit_status()
         
-        # Write out.txt (same as log.txt for now)
-        stdin, stdout, stderr = ssh.exec_command(f"cp /tmp/{output_dir}/log.txt /tmp/{output_dir}/out.txt")
+        echo_cmd = f"cat > /tmp/{output_dir}/out.txt"
+        stdin, stdout, stderr = ssh.exec_command(echo_cmd)
+        stdin.write(all_output)
+        stdin.channel.shutdown_write()
         stdout.channel.recv_exit_status()
         
         # Upload to S3
@@ -272,18 +298,18 @@ def main():
         exit_status = stdout.channel.recv_exit_status()
         
         if exit_status == 0:
-            print(f"Logs uploaded to s3://{args.s3_bucket}/{output_dir}/")
+            log_print(f"Logs uploaded to s3://{args.s3_bucket}/{output_dir}/")
         else:
             error = stderr.read().decode('utf-8', errors='replace')
-            print(f"Error uploading logs: {error}")
+            log_print(f"Error uploading logs: {error}")
         
         # 10. Terminate instance
-        print(f"Terminating instance {instance_id}...")
+        log_print(f"Terminating instance {instance_id}...")
         ec2.terminate_instances(InstanceIds=[instance_id])
-        print("Instance termination request sent")
+        log_print("Instance termination request sent")
             
     except Exception as e:
-        print(f"Error: {str(e)}")
+        log_print(f"Error: {str(e)}")
         
 if __name__ == "__main__":
     main()
