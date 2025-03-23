@@ -158,7 +158,9 @@ We will update this link when a new version comes out.
 ## Citing this repository
 If you use the code in this repository in your own work, please cite it as follows:
 
-Zahid Hassan Tushar, Xiangyang Meng, Adeleke Ademakinwa, Jianwu Wang, Zhibo Zhang, Sanjay Purushotham. (2023). Machine Learning for 3D Cloud Retrievals.  URL: https://github.com/AI-4-atmosphere-remote-sensing/DL_3d_cloud_retrieval/
+Tushar, Z. H., Ademakinwa, A., Wang, J., Zhang, Z., & Purushotham, S. (2024, July). Cloudunet: Adapting unet for retrieving cloud properties. In IGARSS 2024-2024 IEEE International Geoscience and Remote Sensing Symposium (pp. 7163-7167). IEEE.
+
+
 
 
 
