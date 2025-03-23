@@ -28,7 +28,7 @@ python example_test.py --config configs/config_test_example.yaml
 * Sanjay Purushotham, Department of Information Systems, University of Maryland Baltimore County, <psanjay@umbc.edu>
 
 ## References
-Zahid Hassan Tushar, Adeleke Ademakinwa, Jianwu Wang, Zhibo Zhang, and Sanjay Purushotham. "Joint cloud optical thickness and cloud effective radius property retrievals using attention-based deep learning models". In AGU Annual Meeting. American Geophysical Union (AGU), 2024.
+Zahid Hassan Tushar, Adeleke Ademakinwa, Jianwu Wang, Zhibo Zhang, and Sanjay Purushotham. "Joint cloud optical thickness and cloud effective radius property retrievals using attention-based deep learning models". In IGARSS 2025- 2025 IEEE International Geoscience and Remote Sensing Symposium, 2025.
 
 ## License
   Licensed under the [MIT LICENSE](LICENSE)
