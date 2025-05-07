@@ -199,10 +199,20 @@ def main():
         logger.info('Parameters info:\n' + dash_line + param_info + '\n' +
                     dash_line)
 
-
-
         ########################################## Start Training ############################################
+        train_start_time = time.time()
+
         model, train_loss, valid_loss = train_model(model,train_loader,valid_loader, params, device,log_level)
+
+        train_end_time = time.time()
+        train_time_total = train_end_time - train_start_time
+        num_gpus_used = torch.cuda.device_count()
+        train_time_per_gpu = train_time_total / num_gpus_used if num_gpus_used > 0 else train_time_total
+
+        logger.info(f"Total training time: {train_time_total:.2f} seconds")
+        logger.info(f"Estimated training time per GPU: {train_time_per_gpu:.2f} seconds")
+
+
         train_loss2 = valid_loss[len(train_loss)-params['patience']-1]
         valid_loss2 = valid_loss[len(valid_loss)-params['patience']-1]
 
