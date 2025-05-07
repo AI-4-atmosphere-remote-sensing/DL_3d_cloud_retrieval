@@ -38,7 +38,7 @@ for fold in range(5):
         dtype=torch.float64),torch.tensor([0.1903, 0.1261], dtype=torch.float64)]
 
 
-class LES_Dataset(Dataset):
+class Nasa_Dataset(Dataset):
     """
     A custom PyTorch Dataset class for loading and processing data related to LES (Large Eddy Simulation) profiles.
 
